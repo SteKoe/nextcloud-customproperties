@@ -23,4 +23,16 @@ class PropertiesMapper extends QBMapper {
 
 		return $this->findEntities($q);
 	}
+
+    public function findByPathAndName(string $propertypath, string $propertyname, string $uid): Property {
+        $qb = $this->db->getQueryBuilder();
+
+        $q = $qb->select('*')
+            ->from($this->tableName)
+            ->where($qb->expr()->eq('propertypath', $qb->createNamedParameter($propertypath)))
+            ->andWhere($qb->expr()->eq('propertyname', $qb->createNamedParameter($propertyname)))
+            ->andWhere($qb->expr()->eq('userid', $qb->createNamedParameter($uid)));
+
+        return $this->findEntity($q);
+    }
 }
