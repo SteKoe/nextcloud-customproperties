@@ -23,7 +23,7 @@
 				</div>
 				<hr>
 				<div class="input-group">
-					<input class="form-control form-control__label" type="text" v-model="property.propertylabel">
+					<input class="form-control form-control__label" type="text" v-model="property.propertylabel" :placeholder="t('customproperties', 'Create property...')">
 					<button type="submit" class="button">{{ t('customproperties', 'Save') }}</button>
 				</div>
 			</div>
