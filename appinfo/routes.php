@@ -9,11 +9,11 @@
  */
 return [
 	'routes' => [
-		['name' => 'customproperties#index', 'url' => '/properties', 'verb' => 'GET'],
-		['name' => 'customproperties#update', 'url' => '/properties', 'verb' => 'POST'],
+		['name' => 'CustomProperties#index', 'url' => '/properties', 'verb' => 'GET'],
+		['name' => 'CustomProperties#update', 'url' => '/properties', 'verb' => 'POST'],
 
-		['name' => 'adminsettings#index', 'url' => '/customproperties', 'verb' => 'GET'],
-		['name' => 'adminsettings#create', 'url' => '/customproperties', 'verb' => 'POST'],
-		['name' => 'adminsettings#delete', 'url' => '/customproperties/{id}', 'verb' => 'DELETE']
+		['name' => 'AdminSettings#index', 'url' => '/customproperties', 'verb' => 'GET'],
+		['name' => 'AdminSettings#create', 'url' => '/customproperties', 'verb' => 'POST'],
+		['name' => 'AdminSettings#delete', 'url' => '/customproperties/{id}', 'verb' => 'DELETE']
 	]
 ];
