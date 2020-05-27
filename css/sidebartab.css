@@ -1,0 +1,7 @@
+#customproperties label {
+	display: block;
+}
+
+#customproperties input[type="text"] {
+	width: 100%;
+}
