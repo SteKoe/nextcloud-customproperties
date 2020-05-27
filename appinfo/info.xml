@@ -7,11 +7,11 @@
     <description>Files app plugin to add custom properties to files and folders</description>
     <version>1.0.0</version>
     <licence>agpl</licence>
-    <author mail="nextcloud@stekoe.de" >SteKoe</author>
+    <author mail="nextcloud@stekoe.de">SteKoe</author>
     <namespace>CustomProperties</namespace>
     <category>files</category>
     <category>organization</category>
-    <bugs>https://stekoe.de</bugs>
+    <bugs>https://github.com/SteKoe/nextcloud-customproperties/issues</bugs>
     <dependencies>
         <nextcloud min-version="12" max-version="20"/>
     </dependencies>
