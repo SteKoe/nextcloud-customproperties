@@ -33,6 +33,8 @@
 
 <script>
 	import axios from '@nextcloud/axios'
+	import { showError } from '@nextcloud/dialogs'
+	import '@nextcloud/dialogs/styles/toast'
 
 	export default {
 		name: 'AdminSettings',
@@ -99,7 +101,7 @@
 				console.log(propertylabel)
 
 				if(this.isBlank(propertylabel)) {
-					OCP.Toast.error(t('customproperties', 'Property has to have a name!'));
+					showError(t('customproperties', 'Property has to have a name!'));
 					return;
 				}
 
