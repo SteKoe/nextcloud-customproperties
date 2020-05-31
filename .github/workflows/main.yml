@@ -11,12 +11,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        path: customproperties 
     - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: npm install, build, and test
       run: |
-        cd src
+        cd customproperties/src
         npm ci
         npm run build
+    - name: Build release artifact archive
+      run: |
+        tar -czvf customproperties.tar.gz \
+          --exclude=./src/node_modules/ \
+          --exclude=./.git/ \
+          --exclude=./src/ \
+          customproperties/
