@@ -1,0 +1,22 @@
+on:
+  release:
+    types: [created]
+
+env:
+  NODE_VERSION: '12.x'                # set this to the node version to use
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: npm install, build, and test
+      run: |
+        cd src
+        npm ci
+        npm run build
