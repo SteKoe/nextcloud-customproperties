@@ -26,9 +26,7 @@ jobs:
     - name: Build release artifact archive
       run: |
         tar -czvf customproperties.tar.gz \
-          --exclude=./src/node_modules/ \
-          --exclude=./.git/ \
-          --exclude=./src/ \
+          --exclude=./customproperties/src/ \
           customproperties/
     - name: Create Release
       id: create_release
