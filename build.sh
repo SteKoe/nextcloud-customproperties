@@ -38,12 +38,11 @@ signSource() {
 
   rm -rf customproperties/.git customproperties/src
 
-  cid=$(docker run -d -v `pwd`/customproperties:/app -v ~/.nextcloud/certificates/:/nextcloud/certificates/ nextcloud)
+  cid=$(docker run -d -v $(pwd)/customproperties:/app -v ~/.nextcloud/certificates/:/nextcloud/certificates/ nextcloud)
   echo "Sign sources using container '$cid'..."
 
   echo "Waiting for NextCloud to be initialized..."
-  until docker logs $cid 2>&1 | grep "Initializing finished" > /dev/null; 
-  do 
+  until docker logs $cid 2>&1 | grep "Initializing finished" >/dev/null; do
     sleep 1
     echo "Waiting..."
   done
@@ -53,16 +52,16 @@ signSource() {
   docker exec -i $cid /bin/bash -c "chmod -R +w /app" || true
   docker exec -i $cid php occ integrity:sign-app --privateKey=/nextcloud/certificates/customproperties.key --certificate=/nextcloud/certificates/customproperties.crt --path=/app || true
   echo "Tidy up..."
-  docker rm -f $cid > /dev/null
+  docker rm -f $cid >/dev/null
 }
 
 buildArchive() {
   echo "Build archive..."
   (tar -czf customproperties.tar.gz \
-      --exclude=./src/node_modules/ \
-      --exclude=./.git/ \
-      --exclude=./src/ \
-      customproperties/)
+    --exclude=./src/node_modules/ \
+    --exclude=./.git/ \
+    --exclude=./src/ \
+    customproperties/)
 }
 
 createSignature() {

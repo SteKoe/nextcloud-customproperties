@@ -5,7 +5,7 @@
     <name>Custom Properties</name>
     <summary>Files app plugin to add custom properties to files and folders</summary>
     <description>Files app plugin to add custom properties to files and folders</description>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <licence>agpl</licence>
     <author mail="nextcloud@stekoe.de">SteKoe</author>
     <namespace>CustomProperties</namespace>
