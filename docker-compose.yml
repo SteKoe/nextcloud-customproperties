@@ -28,7 +28,7 @@ services:
       - db
     volumes:
       - nextcloud:/var/www/html
-      - ./:/var/www/html/custom_apps/customproperties
+      - ./:/var/www/html/apps/customproperties
     environment:
       - MYSQL_PASSWORD=nextcloud
       - MYSQL_DATABASE=nextcloud

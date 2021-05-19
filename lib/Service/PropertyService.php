@@ -6,6 +6,7 @@ use OCA\CustomProperties\Db\CustomPropertiesMapper;
 use OCA\CustomProperties\Db\PropertiesMapper;
 use OCP\Files\Node;
 use Psr\Log\LoggerInterface;
+use Sabre\DAV\Server;
 
 class PropertyService
 {
@@ -27,7 +28,8 @@ class PropertyService
     public function __construct(
         CustomPropertiesMapper $customPropertiesMapper,
         PropertiesMapper $propertiesMapper,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Server $server
     )
     {
         $this->customPropertiesMapper = $customPropertiesMapper;
@@ -101,7 +103,7 @@ class PropertyService
         // files/admin/b.md
         // files/admin/Photos/Birdie.jpg
         // files/admin/a.pdf
-        $userId = $source->getOwner()->getUID();
+        $userId = $target->getOwner()->getUID();
         $name = $source->getName();
         $propertypath = ltrim(Filesystem::normalizePath("files/$userId/???/$name"), "/");
 
