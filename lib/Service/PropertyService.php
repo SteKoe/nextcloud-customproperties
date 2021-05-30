@@ -1,17 +1,19 @@
 <?php
+
 namespace OCA\CustomProperties\Service;
 
 use OC\Files\Filesystem;
+use OCA\CustomProperties\AppInfo\Application;
 use OCA\CustomProperties\Db\CustomPropertiesMapper;
+use OCA\CustomProperties\Db\CustomProperty;
 use OCA\CustomProperties\Db\PropertiesMapper;
+use OCA\CustomProperties\Db\Property;
+use OCP\AppFramework\Db\Entity;
 use OCP\Files\Node;
 use Psr\Log\LoggerInterface;
-use Sabre\DAV\Server;
 
 class PropertyService
 {
-    const NS_PREFIX = "{http://owncloud.org/ns}";
-
     /**
      * @var CustomPropertiesMapper
      */
@@ -28,8 +30,7 @@ class PropertyService
     public function __construct(
         CustomPropertiesMapper $customPropertiesMapper,
         PropertiesMapper $propertiesMapper,
-        LoggerInterface $logger,
-        Server $server
+        LoggerInterface $logger
     )
     {
         $this->customPropertiesMapper = $customPropertiesMapper;
@@ -39,7 +40,7 @@ class PropertyService
 
     private static function normalizeProperty($prop): array
     {
-        $propertyname = str_replace(self::NS_PREFIX, "", $prop->getPropertyname());
+        $propertyname = str_replace(Application::NS_PREFIX_CUSTOMPROPERTIES, "", $prop->getPropertyname());
         $propertyvalue = $prop->propertyvalue ?? "";
         $propertylabel = $prop->propertylabel ?? $propertyname;
 
@@ -48,6 +49,16 @@ class PropertyService
             "propertyvalue" => $propertyvalue,
             "propertylabel" => $propertylabel
         );
+    }
+
+    /**
+     * @param $propertypath
+     * @param $propertyname
+     * @param $userid
+     * @return Property
+     */
+    function getCustomProperty(string $propertypath, string $propertyname, string $userid): ?Entity {
+        return $this->propertiesMapper->findByPathAndName($propertypath, $propertyname, $userid);
     }
 
     function getProperties($userId, $path, $name): array
@@ -115,11 +126,37 @@ class PropertyService
         ];
 
         $this->logger->info(implode("<br>\n", $log));
+    }
 
-//        $properties = $this->propertiesMapper->findByPathStartsWith($oldPath);
-//        foreach ($properties as $property) {
-//            $property->propertypath = $newPath;
-//            $this->propertiesMapper->insertOrUpdate($property);
-//        }
+    /**
+     * @param string $propertypath
+     * @param string $propertyname
+     * @param string $propertyvalue
+     * @return Property|Entity
+     * @throws \OCP\DB\Exception
+     */
+    public function upsertProperty(string $propertypath, string $propertyname, string $propertyvalue, string $userid)
+    {
+        $res = $this->propertiesMapper->findByPathAndName($propertypath, $propertyname, $userid);
+        if (!is_null($res)) {
+            $res->setPropertyvalue($propertyvalue);
+            return $this->propertiesMapper->update($res);
+        }
+
+        $property = new Property();
+        $property->setUserid($userid);
+        $property->setPropertypath($propertypath);
+        $property->setPropertyname($propertyname);
+        $property->setPropertyvalue($propertyvalue);
+
+        return $this->propertiesMapper->insert($property);
+    }
+
+    /**
+     * @return CustomProperty[]
+     */
+    public function findCustomPropertyDefinitions(): array
+    {
+        return $this->customPropertiesMapper->findAll();
     }
 }

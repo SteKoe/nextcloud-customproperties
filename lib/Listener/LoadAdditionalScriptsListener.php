@@ -13,10 +13,13 @@ class LoadAdditionalScriptsListener implements IEventListener
 {
     public function handle(Event $event): void
     {
-        if (!($event instanceof LoadAdditionalScriptsEvent)) {
-            return;
+        if ($event instanceof LoadAdditionalScriptsEvent) {
+            $this->addScript();
         }
 
+    }
+
+    public function addScript() {
         Util::addScript(Application::APP_ID, 'src-sidebartab');
     }
 }

@@ -2,47 +2,33 @@
 
 namespace OCA\CustomProperties\Controller;
 
-use Exception;
-use OCA\CustomProperties\Db\CustomPropertiesMapper;
-use OCA\CustomProperties\Db\PropertiesMapper;
-use OCA\CustomProperties\Db\Property;
+use OCA\CustomProperties\AppInfo\Application;
 use OCA\CustomProperties\Service\PropertyService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
 class CustomPropertiesController extends Controller
 {
-    const NS_PREFIX = "{http://owncloud.org/ns}";
-
     /**
      * @var PropertyService
      */
     private $propertyService;
     /**
-     * @var CustomPropertiesMapper
-     */
-    private $customPropertiesMapper;
-    /**
-     * @var PropertiesMapper
-     */
-    private $propertiesMapper;
-    /**
      * @var LoggerInterface
      */
     private $logger;
 
-    private $userId;
+    private $userid;
 
-    public function __construct($AppName, IRequest $request, PropertyService $propertyService, CustomPropertiesMapper $customPropertiesMapper, PropertiesMapper $propertiesMapper, LoggerInterface $logger, $UserId)
+    public function __construct($AppName, IRequest $request, PropertyService $propertyService, LoggerInterface $logger, $UserId)
     {
         parent::__construct($AppName, $request);
         $this->propertyService = $propertyService;
-        $this->customPropertiesMapper = $customPropertiesMapper;
-        $this->propertiesMapper = $propertiesMapper;
         $this->logger = $logger;
-        $this->userId = $UserId;
+        $this->userid = $UserId;
     }
 
     /**
@@ -54,7 +40,7 @@ class CustomPropertiesController extends Controller
      */
     public function index(string $path, string $name): JSONResponse
     {
-        $res = $this->propertyService->getProperties($this->userId, $path, $name);
+        $res = $this->propertyService->getProperties($this->userid, $path, $name);
         return new JSONResponse($res);
     }
 
@@ -62,22 +48,9 @@ class CustomPropertiesController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      */
-    public function update(string $propertypath, string $propertyname, string $propertyvalue): \OCP\AppFramework\Db\Entity
+    public function update(string $propertypath, string $propertyname, string $propertyvalue): Entity
     {
-        $propertyname = CustomPropertiesController::NS_PREFIX . $propertyname;
-
-        try {
-            $res = $this->propertiesMapper->findByPathAndName($propertypath, $propertyname, $this->userId);
-            $res->setPropertyvalue($propertyvalue);
-            return $this->propertiesMapper->update($res);
-        } catch (Exception $exception) {
-            $property = new Property();
-            $property->setUserid($this->userId);
-            $property->setPropertypath($propertypath);
-            $property->setPropertyname($propertyname);
-            $property->setPropertyvalue($propertyvalue);
-
-            return $this->propertiesMapper->insert($property);
-        }
+        $propertyname = Application::NS_PREFIX_CUSTOMPROPERTIES . $propertyname;
+        return $this->propertyService->upsertProperty($propertypath, $propertyname, $propertyvalue, $this->userid);
     }
 }

@@ -1,0 +1,16 @@
+PROPFIND http://localhost/remote.php/dav/files/admin/welcome.txt
+
+<d:propfind  xmlns:d="DAV:" xmlns:cp="http://owncloud.org/ns">
+</d:propfind>
+
+===
+
+PROPPATCH http://localhost/remote.php/dav/files/admin/welcome.txt
+
+<A:propertyupdate xmlns:A="DAV:" xmlns:cp="http://owncloud.org/ns">
+  <A:set>
+    <A:prop>
+      <cp:abc>sdfsdf</cp:abc>
+    </A:prop>
+  </A:set>
+</A:propertyupdate>

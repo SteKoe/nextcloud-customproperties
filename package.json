@@ -15,6 +15,7 @@
     "watch": "NODE_ENV=development webpack --progress --watch --config webpack.config.js",
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --ext .js,.vue src --fix",
+    "test:php": "docker-compose exec app phpunit --bootstrap tests/bootstrap.php tests/.",
     "stylelint": "stylelint src",
     "stylelint:fix": "stylelint src --fix"
   },

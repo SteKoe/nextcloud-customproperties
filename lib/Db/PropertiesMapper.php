@@ -2,6 +2,7 @@
 
 namespace OCA\CustomProperties\Db;
 
+use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
@@ -34,7 +35,13 @@ class PropertiesMapper extends QBMapper
         return $this->findEntities($q);
     }
 
-    public function findByPathAndName(string $propertypath, string $propertyname, string $uid): Property
+    /**
+     * @param string $propertypath
+     * @param string $propertyname
+     * @param string $userid
+     * @return Property|null
+     */
+    public function findByPathAndName(string $propertypath, string $propertyname, string $userid): ?Entity
     {
         $qb = $this->db->getQueryBuilder();
 
@@ -42,15 +49,20 @@ class PropertiesMapper extends QBMapper
             ->from($this->tableName)
             ->where($qb->expr()->eq('propertypath', $qb->createNamedParameter($propertypath)))
             ->andWhere($qb->expr()->eq('propertyname', $qb->createNamedParameter($propertyname)))
-            ->andWhere($qb->expr()->eq('userid', $qb->createNamedParameter($uid)));
+            ->andWhere($qb->expr()->eq('userid', $qb->createNamedParameter($userid)));
 
-        return $this->findEntity($q);
+        try {
+            return $this->findEntity($q);
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
      * @return Property[]
      */
-    public function findByPathStartsWith(string $propertypath): array {
+    public function findByPathStartsWith(string $propertypath): array
+    {
         $qb = $this->db->getQueryBuilder();
 
         $IParameter = $qb->createNamedParameter(substr($propertypath, 1) . '%');
