@@ -5,7 +5,8 @@ return [
 		['name' => 'CustomProperties#update', 'url' => '/properties', 'verb' => 'POST'],
 
 		['name' => 'AdminSettings#index', 'url' => '/customproperties', 'verb' => 'GET'],
-		['name' => 'AdminSettings#create', 'url' => '/customproperties', 'verb' => 'POST'],
+		['name' => 'AdminSettings#create', 'url' => '/customproperties', 'verb' => 'PUT'],
+		['name' => 'AdminSettings#update', 'url' => '/customproperties', 'verb' => 'POST'],
 		['name' => 'AdminSettings#delete', 'url' => '/customproperties/{id}', 'verb' => 'DELETE']
 	]
 ];

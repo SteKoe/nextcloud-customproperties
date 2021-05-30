@@ -8,7 +8,7 @@ module.exports = {
 			'always',
 			{
 				ignore: ['after-comment', 'inside-block'],
-			}
+			},
 		],
 		'declaration-empty-line-before': [
 			'never',

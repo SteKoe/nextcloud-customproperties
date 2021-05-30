@@ -7,8 +7,6 @@ use OCP\Settings\ISettings;
 
 class AdminSettings implements ISettings
 {
-    public $abc = "";
-
     public function getForm()
     {
         return new TemplateResponse('customproperties', 'settings/admin');

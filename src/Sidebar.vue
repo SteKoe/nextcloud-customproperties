@@ -93,10 +93,10 @@ export default {
 
 <style lang="css" scoped>
 label {
-  display: block;
+	display: block;
 }
 
-input[type="text"] {
-  width: 100%;
+input[type='text'] {
+	width: 100%;
 }
 </style>
