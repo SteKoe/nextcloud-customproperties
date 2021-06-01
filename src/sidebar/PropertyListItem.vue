@@ -1,22 +1,21 @@
 <template>
 	<div>
-		<div v-for="(property, index) in properties" :key="index" class="input">
-			<label :for="'property_'+property.propertyname">{{ property.propertylabel }}</label>
-			<input :id="'property_'+property.propertyname"
-				v-model="property.propertyvalue"
-				:name="property.propertyname"
-				type="text"
-				placeholder=""
-				@blur="$emit('blur')">
-		</div>
+		<PropertyItem v-for="(property, index) in properties"
+			:key="index"
+			:property="property"
+			:disabled="disabled"
+			@blur="$emit('propertyChanged', $event)" />
 	</div>
 </template>
 
 <script>
+import PropertyItem from './PropertyItem'
 export default {
 	name: 'PropertyListItem',
+	components: { PropertyItem },
 	props: {
 		properties: { type: Array, required: true },
+		disabled: { type: Boolean, default: false },
 	},
 }
 </script>

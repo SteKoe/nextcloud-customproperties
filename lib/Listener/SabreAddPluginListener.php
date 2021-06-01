@@ -2,7 +2,7 @@
 
 namespace OCA\CustomProperties\Listener;
 
-use OCA\CustomProperties\Plugin\SabreServerPlugin;
+use OCA\CustomProperties\Plugin\CustomPropertiesSabreServerPlugin;
 use OCA\CustomProperties\Service\PropertyService;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
@@ -24,7 +24,8 @@ class SabreAddPluginListener implements IEventListener
     public function handle(Event $event): void
     {
         if ($event instanceof SabrePluginEvent) {
-            $event->getServer()->addPlugin(new SabreServerPlugin(
+            $server = $event->getServer();
+            $server->addPlugin(new CustomPropertiesSabreServerPlugin(
                 $this->propertyService,
                 \OC_User::getUser()
             ));

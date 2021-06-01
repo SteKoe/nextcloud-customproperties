@@ -18,7 +18,7 @@ use Sabre\DAV\Tree;
 class SabreServerPluginTest extends TestCase
 {
     /**
-     * @var SabreServerPlugin
+     * @var CustomPropertiesSabreServerPlugin
      */
     private $plugin;
 
@@ -182,7 +182,7 @@ class SabreServerPluginTest extends TestCase
         $this->propertyService->method('getCustomProperty')
             ->willReturn($property);
 
-        $this->plugin = new SabreServerPlugin($this->propertyService, 4711);
+        $this->plugin = new CustomPropertiesSabreServerPlugin($this->propertyService, 4711);
         $root = new SimpleCollection('root', [new SimpleFile("example.txt", "example content", "plain/text")]);
         $this->server = new Server(new Tree($root));
 

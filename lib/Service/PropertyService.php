@@ -76,7 +76,6 @@ class PropertyService
         $customProperties = array_map('self::normalizeProperty', $customProperties);
         $properties = array_map('self::normalizeProperty', $properties);
         $abc = $this->server->getPropertiesIteratorForPath("/files/admin/$name");
-        var_dump("$abc");
 
         $mergedProperties = self::merge_properties($customProperties, $properties);
         foreach ($mergedProperties as $key => $mergedProperty) {
