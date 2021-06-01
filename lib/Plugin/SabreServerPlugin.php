@@ -59,22 +59,25 @@ class SabreServerPlugin extends ServerPlugin
      */
     public function propFind(PropFind $propFind, INode $path)
     {
-        if ($propFind->isAllProps()) {
-            foreach ($this->getCustomPropertynames() as $propertyname) {
-                $entity = $this->propertyService->getCustomProperty($path->getName(), $propertyname, 0);
-
-                $value = $entity === null ? null : $entity->propertyvalue;
-                $status = $entity === null ? 404 : 200;
-
-                $propFind->set($propertyname, $value, $status);
-            }
-        } else {
-            foreach ($this->getCustomPropertynames() as $propertyname) {
-                $propFind->handle($propertyname, function () use ($path, $propertyname) {
-                    return $this->propertyService->getCustomProperty($path->getName(), $propertyname, 0);
-                });
-            }
-        }
+        var_dump(get_class($path));
+//        $customPropertynames = $this->getCustomPropertynames();
+//        if ($propFind->isAllProps()) {
+//            foreach ($customPropertynames as $propertyname) {
+//                $entity = $this->propertyService->getCustomProperty($path->getName(), $propertyname, 0);
+//
+//                $value = $entity === null ? null : $entity->propertyvalue;
+//                $status = $entity === null ? 404 : 200;
+//
+//                var_dump(($path->, $propertyname, $value, $status);
+//                $propFind->set($propertyname, $value, $status);
+//            }
+//        } else {
+//            foreach ($customPropertynames as $propertyname) {
+//                $propFind->handle($propertyname, function () use ($path, $propertyname) {
+//                    return $this->propertyService->getCustomProperty($path->getName(), $propertyname, 0);
+//                });
+//            }
+//        }
     }
 
     /**

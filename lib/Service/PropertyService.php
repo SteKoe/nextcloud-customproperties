@@ -11,6 +11,7 @@ use OCA\CustomProperties\Db\Property;
 use OCP\AppFramework\Db\Entity;
 use OCP\Files\Node;
 use Psr\Log\LoggerInterface;
+use Sabre\DAV\Server;
 
 class PropertyService
 {
@@ -26,16 +27,19 @@ class PropertyService
      * @var LoggerInterface
      */
     private $logger;
+    private Server $server;
 
     public function __construct(
         CustomPropertiesMapper $customPropertiesMapper,
         PropertiesMapper $propertiesMapper,
+        Server $server,
         LoggerInterface $logger
     )
     {
         $this->customPropertiesMapper = $customPropertiesMapper;
         $this->propertiesMapper = $propertiesMapper;
         $this->logger = $logger;
+        $this->server = $server;
     }
 
     private static function normalizeProperty($prop): array
@@ -63,13 +67,16 @@ class PropertyService
 
     function getProperties($userId, $path, $name): array
     {
-        $customProperties = $this->customPropertiesMapper->findAllForUser($userId);
-        $propertypath = ltrim(Filesystem::normalizePath("files/$userId/$path/$name"), "/");
+        $customProperties = $this->customPropertiesMapper->findAll();
+        $string = Filesystem::normalizePath("files/$userId/$path/$name");
+        $propertypath = ltrim($string, "/");
         $properties = $this->propertiesMapper->findAllByPath($propertypath, $userId);
 
         // Normalize the properties
         $customProperties = array_map('self::normalizeProperty', $customProperties);
         $properties = array_map('self::normalizeProperty', $properties);
+        $abc = $this->server->getPropertiesIteratorForPath("/files/admin/$name");
+        var_dump("$abc");
 
         $mergedProperties = self::merge_properties($customProperties, $properties);
         foreach ($mergedProperties as $key => $mergedProperty) {

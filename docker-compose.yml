@@ -6,7 +6,6 @@ volumes:
 services:
   app:
     build: .
-    restart: always
     ports:
       - 80:80
     volumes:

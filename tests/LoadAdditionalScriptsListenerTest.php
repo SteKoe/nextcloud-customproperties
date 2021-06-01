@@ -10,7 +10,7 @@ class LoadAdditionalScriptsListenerTest extends TestCase
     public function testLoadAdditionScripts()
     {
         $listener = $this->getMockBuilder(LoadAdditionalScriptsListener::class)
-            ->setMethods(['addScript'])
+            ->onlyMethods(['addScript'])
             ->getMock();
 
         $listener->expects($this->exactly(1))

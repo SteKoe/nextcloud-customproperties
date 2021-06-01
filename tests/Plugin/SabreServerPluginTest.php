@@ -12,6 +12,7 @@ use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
 use Sabre\DAV\Server;
 use Sabre\DAV\SimpleCollection;
+use Sabre\DAV\SimpleFile;
 use Sabre\DAV\Tree;
 
 class SabreServerPluginTest extends TestCase
@@ -95,7 +96,7 @@ class SabreServerPluginTest extends TestCase
     {
         $this->server->tree = $this->getMockBuilder(Tree::class)
             ->setConstructorArgs([new SimpleCollection("root")])
-            ->setMethods(['getNodeForPath'])
+            ->onlyMethods(['getNodeForPath'])
             ->getMock();
 
         $this->server->tree->method('getNodeForPath')
@@ -182,7 +183,7 @@ class SabreServerPluginTest extends TestCase
             ->willReturn($property);
 
         $this->plugin = new SabreServerPlugin($this->propertyService, 4711);
-        $root = new SimpleCollection('root', ['example.txt' => 'example content']);
+        $root = new SimpleCollection('root', [new SimpleFile("example.txt", "example content", "plain/text")]);
         $this->server = new Server(new Tree($root));
 
         $this->plugin->initialize($this->server);
