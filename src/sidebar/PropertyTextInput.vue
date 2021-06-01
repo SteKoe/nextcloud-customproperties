@@ -1,10 +1,12 @@
 <template>
-	<div class="input">
+	<div class="customproperty-input-group">
 		<label :for="'property_'+property.propertyname">{{ property.propertylabel }}</label>
+
 		<input :id="'property_'+property.propertyname"
 			v-model="property.propertyvalue"
+			class="customproperty-input"
 			:name="property.propertyname"
-			type="text"
+			:type="property.propertytype"
 			:disabled="disabled"
 			:aria-disabled="disabled"
 			@focus="focus"
@@ -14,7 +16,7 @@
 
 <script>
 export default {
-	name: 'PropertyItem',
+	name: 'PropertyTextInput',
 	model: {
 		prop: 'property',
 		event: 'change',
@@ -46,13 +48,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="css" scoped>
-label {
-  display: block;
-}
-
-input[type='text'] {
-  width: 100%;
-}
-</style>

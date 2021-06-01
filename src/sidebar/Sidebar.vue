@@ -1,10 +1,10 @@
 <template>
 	<div :class="{ 'icon-loading': loading }">
-		<PropertyListItem :properties="properties.knownProperties" @propertyChanged="updateProperty($event)" />
+		<PropertyList :properties="properties.knownProperties" @propertyChanged="updateProperty($event)" />
 
 		<template v-if="properties.otherProperties.length > 0">
 			<h3>{{ t('customproperties', 'WebDAV properties') }}</h3>
-			<PropertyListItem :properties="properties.otherProperties" :disabled="true" />
+			<PropertyList :properties="properties.otherProperties" :disabled="true" />
 		</template>
 	</div>
 </template>
@@ -13,11 +13,11 @@
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
-import PropertyListItem from './PropertyListItem'
+import PropertyList from './PropertyList'
 
 export default {
 	name: 'Sidebar',
-	components: { PropertyListItem },
+	components: { PropertyList },
 	data() {
 		return {
 			fileInfo: {},
@@ -198,3 +198,13 @@ export const isEmptyObject = (fileInfo) => {
 	return fileInfo && Object.keys(fileInfo).length === 0 && fileInfo.constructor === Object
 }
 </script>
+
+<style lang="css">
+.customproperty-input-group label {
+  display: block;
+}
+
+.customproperty-input-group .customproperty-input {
+  width: 100%;
+}
+</style>

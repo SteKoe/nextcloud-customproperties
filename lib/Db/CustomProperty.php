@@ -12,6 +12,8 @@ class CustomProperty extends Entity
     public $propertyname;
     /** @var string */
     public $propertylabel;
+    /** @var string */
+    public $propertytype;
 
     public function __construct()
     {
@@ -19,6 +21,7 @@ class CustomProperty extends Entity
         $this->addType('userId', 'string');
         $this->addType('propertyname', 'string');
         $this->addType('propertylabel', 'string');
+        $this->addType('propertytype', 'string');
     }
 
     public static function createSlug($propertylabel)
