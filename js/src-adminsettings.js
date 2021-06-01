@@ -13410,12 +13410,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -13524,14 +13518,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'CreateCustomPropertyForm',
 
   data() {
     return {
       property: {
-        propertylabel: null
-      }
+        propertyname: null,
+        propertylabel: null,
+        propertytype: 'text'
+      },
+      propertytypes: [{
+        name: 'Text',
+        value: 'text'
+      }, {
+        name: 'URL / Link',
+        value: 'url'
+      }, {
+        name: 'Date',
+        value: 'date'
+      }, {
+        name: 'Number',
+        value: 'number'
+      }]
     };
   }
 
@@ -22455,22 +22476,7 @@ var render = function() {
           _vm._s(
             _vm.t(
               "customproperties",
-              'Custom properties defined here are available to all users. They are shown in "Properties" tab in sidebar view. They can be accessed via WebDAV.'
-            )
-          ) +
-          "\n\t"
-      )
-    ]),
-    _vm._v(" "),
-    _c("h3", [_vm._v(_vm._s(_vm.t("customproperties", "Manage properties")))]),
-    _vm._v(" "),
-    _c("p", { staticClass: "settings-hint" }, [
-      _vm._v(
-        "\n\t\t" +
-          _vm._s(
-            _vm.t(
-              "customproperties",
-              "Deleting properties will not wipe already set property values."
+              'Custom properties defined here are available to all users. They are shown in "Properties" tab in sidebar view. They can be accessed via WebDAV. Deleting properties will not wipe property values.'
             )
           ) +
           "\n\t"
@@ -22520,6 +22526,74 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "input-group" }, [
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.property.propertytype,
+            expression: "property.propertytype"
+          }
+        ],
+        staticClass: "customproperty-type",
+        on: {
+          change: function($event) {
+            var $$selectedVal = Array.prototype.filter
+              .call($event.target.options, function(o) {
+                return o.selected
+              })
+              .map(function(o) {
+                var val = "_value" in o ? o._value : o.value
+                return val
+              })
+            _vm.$set(
+              _vm.property,
+              "propertytype",
+              $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+            )
+          }
+        }
+      },
+      _vm._l(_vm.propertytypes, function(type) {
+        return _c("option", {
+          key: type.value,
+          domProps: {
+            value: type.value,
+            textContent: _vm._s(_vm.t("customproperties", type.name))
+          }
+        })
+      }),
+      0
+    ),
+    _vm._v(" "),
+    _c("input", {
+      directives: [
+        {
+          name: "model",
+          rawName: "v-model",
+          value: _vm.property.propertyname,
+          expression: "property.propertyname"
+        }
+      ],
+      staticClass: "customproperty-name",
+      attrs: {
+        pattern: "[a-z]",
+        type: "text",
+        placeholder: _vm.t("customproperties", "Name...")
+      },
+      domProps: { value: _vm.property.propertyname },
+      on: {
+        input: function($event) {
+          if ($event.target.composing) {
+            return
+          }
+          _vm.$set(_vm.property, "propertyname", $event.target.value)
+        }
+      }
+    }),
+    _vm._v(" "),
     _c("input", {
       directives: [
         {
@@ -22532,7 +22606,7 @@ var render = function() {
       staticClass: "customproperty-label",
       attrs: {
         type: "text",
-        placeholder: _vm.t("customproperties", "Create property...")
+        placeholder: _vm.t("customproperties", "Label...")
       },
       domProps: { value: _vm.property.propertylabel },
       on: {
@@ -22545,19 +22619,16 @@ var render = function() {
       }
     }),
     _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "button",
-        attrs: { type: "submit" },
-        on: {
-          click: function($event) {
-            return _vm.$emit("createProperty", _vm.property)
-          }
+    _c("button", {
+      staticClass: "button",
+      attrs: { type: "submit" },
+      domProps: { textContent: _vm._s(_vm.t("customproperties", "Add")) },
+      on: {
+        click: function($event) {
+          return _vm.$emit("createProperty", _vm.property)
         }
-      },
-      [_vm._v("\n\t\t" + _vm._s(_vm.t("customproperties", "Add")) + "\n\t")]
-    )
+      }
+    })
   ])
 }
 var staticRenderFns = []
@@ -22590,9 +22661,7 @@ var render = function() {
         _c("label", {
           staticClass: "customproperty-label",
           attrs: { for: "propertylabel_" + customProperty.id },
-          domProps: {
-            textContent: _vm._s(customProperty.propertynameWithNamespace)
-          }
+          domProps: { textContent: _vm._s(customProperty.propertyname) }
         }),
         _vm._v(" "),
         _c("div", { staticClass: "form-control-wrapper" }, [
@@ -31416,4 +31485,4 @@ vue__WEBPACK_IMPORTED_MODULE_2__.default.prototype.n = _nextcloud_l10n__WEBPACK_
 
 /******/ })()
 ;
-//# sourceMappingURL=src-adminsettings.js.map?v=bf595db732f50974a1f8
+//# sourceMappingURL=src-adminsettings.js.map?v=88ac8ed26d11443f9b2d

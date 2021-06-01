@@ -23,7 +23,6 @@ class Version1000Date20200522000000 extends SimpleMigrationStep
         if (!$schema->hasTable('customproperties')) {
             $table = $schema->createTable('customproperties');
 
-            $table->setPrimaryKey(['id']);
             $table->addColumn('id', 'integer', [
                 'autoincrement' => true,
                 'notnull' => true,
@@ -40,6 +39,8 @@ class Version1000Date20200522000000 extends SimpleMigrationStep
                 'notnull' => true,
                 'length' => 200
             ]);
+
+            $table->setPrimaryKey(['id']);
         }
         return $schema;
     }

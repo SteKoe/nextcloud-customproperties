@@ -40,23 +40,19 @@ export default {
 
 				const properties = await this.retrieveProps()
 				const customProperties = await this.retrieveCustomProperties()
-				const customPropertyNames = customProperties.map(cp => cp.propertynameWithNamespace)
+				const customPropertyNames = customProperties.map(cp => cp.propertyname)
 
-				this.properties.knownProperties = properties
-					.filter(property => {
-						return customPropertyNames.includes(property.propertynameWithNamespace)
-					})
-					.map(property => {
-						const customProperty = customProperties.find(cp => cp.propertynameWithNamespace === property.propertynameWithNamespace)
-						return {
-							...customProperty,
-							...property,
-						}
-					})
+				this.properties.knownProperties = customProperties.map(customProperty => {
+					const property = properties.find(p => customProperty.propertyname === p.propertyname)
+					return {
+						...property,
+						...customProperty,
+					}
+				})
 
 				this.properties.otherProperties = properties
 					.filter(property => {
-						return !customPropertyNames.includes(property.propertynameWithNamespace)
+						return !customPropertyNames.includes(property.propertyname)
 					})
 					.map(property => {
 						return {
@@ -183,7 +179,6 @@ const xmlToTagList = (xmlString) => {
 					propertyname,
 					propertyvalue,
 					namespaceURI,
-					propertynameWithNamespace: `{${namespaceURI}}${propertynameWithoutPrefix}`,
 				}
 			})
 	}

@@ -33,7 +33,7 @@ class CustomPropertiesController extends Controller
     {
         $res = $this->customPropertiesMapper->findAll();
         $entities = array_map(function ($prop) {
-            $prop->propertynameWithNamespace = "{" . Application::NS_PREFIX_CUSTOMPROPERTIES . "}" . $prop->propertyname;
+            $prop->propertyname = "oc:" . $prop->propertyname;
             return $prop;
         }, $res);
         return new JSONResponse($entities);

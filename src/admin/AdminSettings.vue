@@ -3,13 +3,7 @@
 		<h2>{{ t('customproperties', 'Custom Properties') }}</h2>
 		<p class="settings-hint">
 			{{
-				t('customproperties', 'Custom properties defined here are available to all users. They are shown in "Properties" tab in sidebar view. They can be accessed via WebDAV.')
-			}}
-		</p>
-		<h3>{{ t('customproperties', 'Manage properties') }}</h3>
-		<p class="settings-hint">
-			{{
-				t('customproperties', 'Deleting properties will not wipe already set property values.')
+				t('customproperties', 'Custom properties defined here are available to all users. They are shown in "Properties" tab in sidebar view. They can be accessed via WebDAV. Deleting properties will not wipe property values.')
 			}}
 		</p>
 		<div class="form-group">

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div v-for="(customProperty, index) in properties" :key="index" class="input-group">
-			<label class="customproperty-label" :for="'propertylabel_'+customProperty.id" v-text="customProperty.propertynameWithNamespace" />
+			<label class="customproperty-label" :for="'propertylabel_'+customProperty.id" v-text="customProperty.propertyname" />
 			<div class="form-control-wrapper">
 				<input :id="'propertylabel_'+customProperty.id"
 					v-model="customProperty.propertylabel"

@@ -39,15 +39,20 @@ export default {
 	data() {
 		return {
 			value: undefined,
-			isInEditMode: false,
+			isInEditMode: this.property.propertyvalue === undefined,
 		}
 	},
 	methods: {
+	  setEditMode() {
+			const propertyvalue = this.property.propertyvalue
+			this.isInEditMode = propertyvalue === undefined || propertyvalue.trim() === ''
+		},
 		focus() {
 			this.value = this.property.propertyvalue
 		},
 		blur() {
 			if (this.value !== this.property.propertyvalue) {
+			  this.setEditMode()
 				this.$emit('blur', this.property)
 			}
 		},

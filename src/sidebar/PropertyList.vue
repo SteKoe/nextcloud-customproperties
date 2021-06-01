@@ -2,7 +2,7 @@
 	<div>
 		<template v-for="(property, index) in properties">
 			<PropertyLinkInput
-				v-if="isType(property.propertytype, 'link')"
+				v-if="isType(property.propertytype, 'url')"
 				:key="index"
 				:property="property"
 				:disabled="disabled"

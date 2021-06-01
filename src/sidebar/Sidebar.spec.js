@@ -82,19 +82,16 @@ describe('Sidebar.vue', () => {
 				propertyname: 'oc:id',
 				propertyvalue: 'id',
 				namespaceURI: 'http://owncloud.org/ns',
-				propertynameWithNamespace: '{http://owncloud.org/ns}id',
 			},
 			{
 				propertyname: 'oc:name',
 				namespaceURI: 'http://owncloud.org/ns',
 				propertyvalue: 'name',
-				propertynameWithNamespace: '{http://owncloud.org/ns}name',
 			},
 			{
 				propertyname: 'oc:b',
 				namespaceURI: 'http://owncloud.org/ns',
 				propertyvalue: undefined,
-				propertynameWithNamespace: '{http://owncloud.org/ns}b',
 			},
 		])
 	})

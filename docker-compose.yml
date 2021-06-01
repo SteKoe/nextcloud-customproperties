@@ -9,6 +9,8 @@ services:
     image: mariadb
     restart: always
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    ports:
+      - 3306:3306
     volumes:
       - db:/var/lib/mysql
     environment:

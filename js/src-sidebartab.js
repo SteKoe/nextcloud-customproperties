@@ -6825,17 +6825,23 @@ __webpack_require__.r(__webpack_exports__);
   data() {
     return {
       value: undefined,
-      isInEditMode: false
+      isInEditMode: this.property.propertyvalue === undefined
     };
   },
 
   methods: {
+    setEditMode() {
+      const propertyvalue = this.property.propertyvalue;
+      this.isInEditMode = propertyvalue === undefined || propertyvalue.trim() === '';
+    },
+
     focus() {
       this.value = this.property.propertyvalue;
     },
 
     blur() {
       if (this.value !== this.property.propertyvalue) {
+        this.setEditMode();
         this.$emit('blur', this.property);
       }
     }
@@ -7030,17 +7036,15 @@ __webpack_require__.r(__webpack_exports__);
         this.fileInfo = fileInfo;
         const properties = await this.retrieveProps();
         const customProperties = await this.retrieveCustomProperties();
-        const customPropertyNames = customProperties.map(cp => cp.propertynameWithNamespace);
-        this.properties.knownProperties = properties.filter(property => {
-          return customPropertyNames.includes(property.propertynameWithNamespace);
-        }).map(property => {
-          const customProperty = customProperties.find(cp => cp.propertynameWithNamespace === property.propertynameWithNamespace);
-          return { ...customProperty,
-            ...property
+        const customPropertyNames = customProperties.map(cp => cp.propertyname);
+        this.properties.knownProperties = customProperties.map(customProperty => {
+          const property = properties.find(p => customProperty.propertyname === p.propertyname);
+          return { ...property,
+            ...customProperty
           };
         });
         this.properties.otherProperties = properties.filter(property => {
-          return !customPropertyNames.includes(property.propertynameWithNamespace);
+          return !customPropertyNames.includes(property.propertyname);
         }).map(property => {
           return {
             propertylabel: property.propertyname,
@@ -7160,8 +7164,7 @@ const xmlToTagList = xmlString => {
       return {
         propertyname,
         propertyvalue,
-        namespaceURI,
-        propertynameWithNamespace: "{".concat(namespaceURI, "}").concat(propertynameWithoutPrefix)
+        namespaceURI
       };
     });
   }
@@ -16000,7 +16003,7 @@ var render = function() {
     [
       _vm._l(_vm.properties, function(property, index) {
         return [
-          _vm.isType(property.propertytype, "link")
+          _vm.isType(property.propertytype, "url")
             ? _c("PropertyLinkInput", {
                 key: index,
                 attrs: { property: property, disabled: _vm.disabled },
@@ -24990,4 +24993,4 @@ window.addEventListener('DOMContentLoaded', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=src-sidebartab.js.map?v=d4a533284c0e557f693c
+//# sourceMappingURL=src-sidebartab.js.map?v=3cb2463e2390bf1e93c7
