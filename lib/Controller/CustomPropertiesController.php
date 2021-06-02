@@ -2,17 +2,16 @@
 
 namespace OCA\CustomProperties\Controller;
 
-use Cassandra\Custom;
-use OCA\CustomProperties\AppInfo\Application;
 use OCA\CustomProperties\Db\CustomPropertiesMapper;
 use OCA\CustomProperties\Db\CustomProperty;
+use OCA\CustomProperties\Error\CustomPropertyInvalidError;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
 class CustomPropertiesController extends Controller
 {
-
     /**
      * @var CustomPropertiesMapper
      */
@@ -42,13 +41,13 @@ class CustomPropertiesController extends Controller
     /**
      * @NoCSRFRequired
      * @param string $propertylabel
-     * @return CustomProperty
+     * @return CustomProperty|Entity
      */
-    public function create(string $propertylabel): CustomProperty
+    public function create(CustomProperty $customProperty): Entity
     {
-        $customProperty = new CustomProperty();
-        $customProperty->setPropertylabel($propertylabel);
-        $customProperty->setPropertyname(CustomProperty::createSlug($propertylabel));
+        if (!$customProperty->isValid()) {
+            throw new CustomPropertyInvalidError();
+        }
 
         return $this->customPropertiesMapper->insert($customProperty);
     }
@@ -56,12 +55,19 @@ class CustomPropertiesController extends Controller
     /**
      * @NoCSRFRequired
      * @param CustomProperty $customProperty
-     * @return CustomProperty
+     * @return CustomProperty|Entity
      */
-    public function update(int $id, $customProperty): CustomProperty
+    public function update(CustomProperty $customProperty): Entity
     {
-        $entity = $this->customPropertiesMapper->findById($customProperty["id"]);
-        $entity->setPropertylabel($customProperty["propertylabel"]);
+        if (!$customProperty->isValid()) {
+            throw new CustomPropertyInvalidError();
+        }
+
+        $entity = $this->customPropertiesMapper->findById($customProperty->id);
+
+        $entity->setPropertyname($customProperty->propertyname);
+        $entity->setPropertylabel($customProperty->propertylabel);
+
         return $this->customPropertiesMapper->update($entity);
     }
 

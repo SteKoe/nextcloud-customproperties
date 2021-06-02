@@ -25,17 +25,22 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
     private $propertyService;
 
     private $userId;
+    /**
+     * @var CustomProperty[]
+     */
+    private array $customPropertyDefinitions;
 
     public function __construct(PropertyService $propertyService, $userId)
     {
         $this->propertyService = $propertyService;
         $this->userId = $userId;
+
+        $this->customPropertyDefinitions = $this->propertyService->findCustomPropertyDefinitions();
     }
 
     public function initialize(Server $server)
     {
         $this->server = $server;
-        $this->server->xml->namespaceMap[Application::NS_PREFIX_CUSTOMPROPERTIES] = 'oc';
 
         $this->server->on('propFind', [$this, 'propFind']);
         $this->server->on('propPatch', [$this, 'propPatch']);
@@ -43,11 +48,9 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
 
     private function getCustomPropertynames()
     {
-        $customPropertyDefinitions = $this->propertyService->findCustomPropertyDefinitions();
-
         return array_map(function (CustomProperty $customProperty) {
             return "{" . Application::NS_PREFIX_CUSTOMPROPERTIES . "}" . $customProperty->propertyname;
-        }, $customPropertyDefinitions);
+        }, $this->customPropertyDefinitions);
     }
 
     /**
@@ -59,25 +62,14 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
     {
         if ($node instanceof Node) {
             $path = "files" . DIRECTORY_SEPARATOR . \OC_User::getUser() . $node->getPath();
-            $customPropertynames = $this->getCustomPropertynames();
+
             if ($propFind->isAllProps()) {
-                foreach ($customPropertynames as $propertyname) {
-                    $entity = $this->propertyService->getCustomProperty($path, $propertyname, $this->userId);
-
-                    $value = $entity === null ? null : $entity->propertyvalue;
-
-                    $propFind->set($propertyname, $value);
-                }
+                $this->handlePropFindAllProps($propFind, $path);
             }
             else {
-                foreach ($customPropertynames as $propertyname) {
-                    $propFind->handle($propertyname, function () use ($path, $propertyname) {
-                        return $this->propertyService->getCustomProperty($path, $propertyname, $this->userId);
-                    });
-                }
+                $this->handlePropFind($propFind, $path);
             }
         }
-
     }
 
     /**
@@ -90,6 +82,7 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
     public function propPatch($path, PropPatch $propPatch)
     {
         $node = $this->server->tree->getNodeForPath($path);
+
         if (!($node instanceof INode)) {
             return;
         }
@@ -104,5 +97,32 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
                 return false;
             }
         });
+    }
+
+    /**
+     * @param PropFind $propFind
+     * @param string $path
+     */
+    private function handlePropFindAllProps(PropFind $propFind, string $path): void
+    {
+        foreach ($this->getCustomPropertynames() as $propertyname) {
+            $entity = $this->propertyService->getCustomProperty($path, $propertyname, $this->userId);
+            $value = $entity === null ? null : $entity->propertyvalue;
+
+            $propFind->set($propertyname, $value);
+        }
+    }
+
+    /**
+     * @param PropFind $propFind
+     * @param string $path
+     */
+    private function handlePropFind(PropFind $propFind, string $path): void
+    {
+        foreach ($this->getCustomPropertynames() as $propertyname) {
+            $propFind->handle($propertyname, function () use ($path, $propertyname) {
+                return $this->propertyService->getCustomProperty($path, $propertyname, $this->userId);
+            });
+        }
     }
 }

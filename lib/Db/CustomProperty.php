@@ -2,6 +2,7 @@
 
 namespace OCA\CustomProperties\Db;
 
+use OCA\CustomProperties\AppInfo\Application;
 use OCP\AppFramework\Db\Entity;
 
 class CustomProperty extends Entity
@@ -24,8 +25,12 @@ class CustomProperty extends Entity
         $this->addType('propertytype', 'string');
     }
 
-    public static function createSlug($propertylabel)
+    public static function withNamespaceURI($propertyname): string {
+        return "{" . Application::NS_PREFIX_CUSTOMPROPERTIES . "}" . $propertyname;
+    }
+
+    public function isValid(): bool
     {
-        return strtolower(trim(preg_replace('/[^A-Za-z0-9]+/', '', $propertylabel)));
+        return ($this->propertyname !== null) && (preg_match('/^[a-z]{1}[a-z0-9]*$/', $this->propertyname) === 1);
     }
 }
