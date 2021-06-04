@@ -20,7 +20,8 @@
     "eslint": "eslint --ext .js,.vue src",
     "eslint:fix": "eslint --ext .js,.vue src --fix",
     "stylelint": "stylelint src",
-    "stylelint:fix": "stylelint src --fix"
+    "stylelint:fix": "stylelint src --fix",
+    "generate:i10n": "docker-compose exec app translationtool convert-po-files"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"

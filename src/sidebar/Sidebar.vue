@@ -30,37 +30,40 @@ export default {
 	},
 	methods: {
 		async update(fileInfo) {
-			this.loading = true
 
 			this.properties.knownProperties = []
 			this.properties.otherProperties = []
 
 			if (!isEmptyObject(fileInfo)) {
 				this.fileInfo = fileInfo
+				await this.updateInternal()
+			}
+		},
+		async updateInternal() {
+			this.loading = true
 
-				const properties = await this.retrieveProps()
-				const customProperties = await this.retrieveCustomProperties()
-				const customPropertyNames = customProperties.map(cp => cp.propertyname)
+			const properties = await this.retrieveProps()
+			const customProperties = await this.retrieveCustomProperties()
+			const customPropertyNames = customProperties.map(cp => `${cp.prefix}:${cp.propertyname}`)
 
-				this.properties.knownProperties = customProperties.map(customProperty => {
-					const property = properties.find(p => customProperty.propertyname === p.propertyname)
+			this.properties.knownProperties = customProperties.map(cp => {
+				const property = properties.find(p => `${cp.prefix}:${cp.propertyname}` === p.propertyname)
+				return {
+					...property,
+					...cp,
+				}
+			})
+
+			this.properties.otherProperties = properties
+				.filter(property => {
+					return !customPropertyNames.includes(property.propertyname)
+				})
+				.map(property => {
 					return {
+						propertylabel: property.propertyname,
 						...property,
-						...customProperty,
 					}
 				})
-
-				this.properties.otherProperties = properties
-					.filter(property => {
-						return !customPropertyNames.includes(property.propertyname)
-					})
-					.map(property => {
-						return {
-							propertylabel: property.propertyname,
-							...property,
-						}
-					})
-			}
 
 			this.loading = false
 		},
@@ -85,6 +88,7 @@ export default {
 			const uid = getCurrentUser().uid
 			const path = `/files/${uid}/${this.fileInfo.path}/${this.fileInfo.name}`.replace(/\/+/ig, '/')
 			const url = generateRemoteUrl('dav') + path
+			const propTag = `${property.prefix}:${property.propertyname}`
 			await axios.request({
 				method: 'PROPPATCH',
 				url,
@@ -92,11 +96,13 @@ export default {
           <d:propertyupdate xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
            <d:set>
              <d:prop>
-              <${property.propertyname}>${property.propertyvalue}</${property.propertyname}>
+              <${propTag}>${property.propertyvalue}</${propTag}>
              </d:prop>
            </d:set>
           </d:propertyupdate>`,
 			})
+
+			await this.updateInternal()
 		},
 	},
 }
@@ -194,12 +200,43 @@ export const isEmptyObject = (fileInfo) => {
 }
 </script>
 
-<style lang="css">
-.customproperty-input-group label {
-  display: block;
+<style lang="scss">
+.customproperty-input-group {
+  display: flex;
+  align-items: stretch;
 }
 
-.customproperty-input-group .customproperty-input {
-  width: 100%;
+.customproperty-input-group-append {
+  display: flex;
+  margin-left: -1px;
+}
+
+.customproperty-input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  margin-bottom: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.customproperty-form-control {
+  flex: 1 1 auto;
+  margin: 0 !important;
+}
+
+.customproperty-form-group {
+  > label {
+    display: block;
+  }
 }
 </style>

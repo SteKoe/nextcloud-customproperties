@@ -24,7 +24,7 @@ services:
       - 80:80
     volumes:
       - ../nextcloud-server:/var/www/html
-      - ./:/var/www/html/apps/customproperties:ro
+      - ./:/var/www/html/apps/customproperties
     environment:
       - NEXTCLOUD_ADMIN_USER=admin
       - NEXTCLOUD_ADMIN_PASSWORD=admin

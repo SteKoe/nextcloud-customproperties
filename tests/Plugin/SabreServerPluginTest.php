@@ -43,7 +43,7 @@ class SabreServerPluginTest extends TestCase
     {
         $path = "example.txt";
         $propertyvalue = "propertyname";
-        $propertyname = "{" . Application::NS_PREFIX_CUSTOMPROPERTIES . "}propertyname";
+        $propertyname = "{" . Application::NAMESPACE_URL . "}propertyname";
 
         $this->propertyService->expects($this->exactly(1))
             ->method('upsertProperty')

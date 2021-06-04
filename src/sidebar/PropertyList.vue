@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import PropertyTextInput from './PropertyTextInput'
-import PropertyLinkInput from './PropertyLinkInput'
+import PropertyTextInput from './input/PropertyTextInput'
+import PropertyLinkInput from './input/PropertyLinkInput'
 
 export default {
 	name: 'PropertyList',

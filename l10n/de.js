@@ -1,4 +1,6 @@
-{ "translations": {
+OC.L10N.register(
+    "customproperties",
+    {
     "Files app plugin to add custom properties to files and folders" : "Plugin, welches in der Seitenleiste das Betrachten und Verwalten von benutzerdefinierten Metadaten ermöglicht.",
     "Properties" : "Metadaten",
     "Custom Property has been deleted!" : "Benutzerdefiniertes Metadatum wurde entfernt!",
@@ -12,5 +14,5 @@
     "Update" : "Speichern",
     "Delete" : "Löschen",
     "WebDAV properties" : "WebDAV-Metadaten"
-},"pluralForm" :""
-}
+},
+"");

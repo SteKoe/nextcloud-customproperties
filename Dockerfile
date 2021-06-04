@@ -1,12 +1,14 @@
 FROM nextcloud
 
-RUN apt-get update && apt-get install -y wget
+RUN apt-get update && apt-get install -y wget gettext
 
 RUN wget -O /usr/local/bin/phpunit https://phar.phpunit.de/phpunit-9.phar \
     && chmod +x /usr/local/bin/phpunit
 
-RUN pecl install xdebug && docker-php-ext-enable xdebug
+RUN wget -O /usr/local/bin/translationtool https://github.com/nextcloud/docker-ci/raw/master/translations/translationtool/translationtool.phar \
+    && chmod +x /usr/local/bin/translationtool
 
+RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 RUN echo 'zend_extension=xdebug.so' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN echo 'xdebug.profiler_enable=1' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini

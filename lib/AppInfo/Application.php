@@ -15,7 +15,8 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 class Application extends App implements IBootstrap
 {
     const APP_ID = 'customproperties';
-    const NS_PREFIX_CUSTOMPROPERTIES = "http://owncloud.org/ns";
+    const NAMESPACE_URL = "http://owncloud.org/ns";
+    const NAMESPACE_PREFIX = "oc";
 
     public function __construct(array $urlParams = [])
     {

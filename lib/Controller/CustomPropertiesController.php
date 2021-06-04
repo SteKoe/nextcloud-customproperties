@@ -2,6 +2,7 @@
 
 namespace OCA\CustomProperties\Controller;
 
+use OCA\CustomProperties\AppInfo\Application;
 use OCA\CustomProperties\Db\CustomPropertiesMapper;
 use OCA\CustomProperties\Db\CustomProperty;
 use OCA\CustomProperties\Error\CustomPropertyInvalidError;

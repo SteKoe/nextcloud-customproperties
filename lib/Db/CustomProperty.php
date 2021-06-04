@@ -16,6 +16,9 @@ class CustomProperty extends Entity
     /** @var string */
     public $propertytype;
 
+    public String $prefix = Application::NAMESPACE_PREFIX;
+    public String $namespaceURL = Application::NAMESPACE_URL;
+
     public function __construct()
     {
         $this->addType('id', 'int');
@@ -26,7 +29,7 @@ class CustomProperty extends Entity
     }
 
     public static function withNamespaceURI($propertyname): string {
-        return "{" . Application::NS_PREFIX_CUSTOMPROPERTIES . "}" . $propertyname;
+        return "{" . Application::NAMESPACE_URL . "}" . $propertyname;
     }
 
     public function isValid(): bool

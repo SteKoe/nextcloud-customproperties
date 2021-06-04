@@ -1,16 +1,18 @@
 <template>
-	<div class="customproperty-input-group">
+	<div class="customproperty-form-group">
 		<label :for="'property_'+property_.propertyname">{{ property_.propertylabel }}</label>
 
-		<input :id="'property_'+property_.propertyname"
-			v-model="property_.propertyvalue"
-			:aria-disabled="disabled"
-			:disabled="disabled"
-			:name="property_.propertyname"
-			:type="property_.propertytype"
-			class="customproperty-input"
-			@blur="blur"
-			@focus="focus">
+		<div class="customproperty-input-group">
+			<input :id="'property_'+property_.propertyname"
+				v-model="property_.propertyvalue"
+				:aria-disabled="disabled"
+				:disabled="disabled"
+				:name="property_.propertyname"
+				:type="property_.propertytype"
+				class="customproperty-form-control"
+				@blur="blur"
+				@focus="focus">
+		</div>
 	</div>
 </template>
 

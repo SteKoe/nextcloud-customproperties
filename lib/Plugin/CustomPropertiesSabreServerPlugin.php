@@ -49,7 +49,7 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
     private function getCustomPropertynames()
     {
         return array_map(function (CustomProperty $customProperty) {
-            return "{" . Application::NS_PREFIX_CUSTOMPROPERTIES . "}" . $customProperty->propertyname;
+            return "{" . Application::NAMESPACE_URL . "}" . $customProperty->propertyname;
         }, $this->customPropertyDefinitions);
     }
 
