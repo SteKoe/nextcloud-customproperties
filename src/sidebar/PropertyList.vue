@@ -4,14 +4,14 @@
 			<PropertyLinkInput
 				v-if="isType(property.propertytype, 'url')"
 				:key="index"
-				:property="property"
 				:disabled="disabled"
+				:property="property"
 				@blur="$emit('propertyChanged', $event)" />
 			<PropertyTextInput
 				v-else
 				:key="index"
-				:property="property"
 				:disabled="disabled"
+				:property="property"
 				@blur="$emit('propertyChanged', $event)" />
 		</template>
 	</div>
@@ -23,7 +23,10 @@ import PropertyLinkInput from './PropertyLinkInput'
 
 export default {
 	name: 'PropertyList',
-	components: { PropertyLinkInput, PropertyTextInput },
+	components: {
+		PropertyLinkInput,
+		PropertyTextInput,
+	},
 	props: {
 		properties: {
 			type: Array,

@@ -4,7 +4,7 @@
 
 		<template v-if="properties.otherProperties.length > 0">
 			<h3>{{ t('customproperties', 'WebDAV properties') }}</h3>
-			<PropertyList :properties="properties.otherProperties" :disabled="true" />
+			<PropertyList :disabled="true" :properties="properties.otherProperties" />
 		</template>
 	</div>
 </template>
@@ -168,13 +168,13 @@ const xmlToTagList = (xmlString) => {
 				return Object.entries(tag)
 					.map(a => a)
 					.filter(([nodeType, content]) => {
-						return content.hasOwnProperty('@prefix')
+						return content['@prefix'] !== undefined
 					})
 			})
 			.map(([propertyname, value]) => {
 				const namespaceURI = value['@namespaceURI']
 				const propertyvalue = value['#text']
-				const propertynameWithoutPrefix = propertyname.split(':').pop()
+
 				return {
 					propertyname,
 					propertyvalue,

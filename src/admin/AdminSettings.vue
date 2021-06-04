@@ -6,10 +6,16 @@
 				t('customproperties', 'Custom properties defined here are available to all users. They are shown in "Properties" tab in sidebar view. They can be accessed via WebDAV. Deleting properties will not wipe property values.')
 			}}
 		</p>
-		<div class="form-group">
+		<div>
 			<CreateCustomPropertyForm @createProperty="createProperty" />
+
 			<hr>
-			<CustomPropertyList :properties="properties" @update="updateProperty" @remove="removeProperty" />
+			<template v-for="property in properties">
+				<EditCustomPropertyForm :key="property.id"
+					:property="property"
+					@deleteProperty="deleteProperty"
+					@updateProperty="updateProperty" />
+			</template>
 		</div>
 	</section>
 </template>
@@ -17,16 +23,16 @@
 <script>
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import { showError } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import '@nextcloud/dialogs/styles/toast.scss'
-import CustomPropertyList from './CustomPropertyList'
-import CreateCustomPropertyForm from './CreateCustomPropertyForm'
+import CreateCustomPropertyForm from './customPropertyForm/CreateCustomPropertyForm'
+import EditCustomPropertyForm from './customPropertyForm/EditCustomPropertyForm'
 
 export default {
 	name: 'AdminSettings',
 	components: {
+		EditCustomPropertyForm,
 		CreateCustomPropertyForm,
-		CustomPropertyList,
 	},
 	data() {
 		return {
@@ -34,9 +40,6 @@ export default {
 			loading: true,
 			name: t('properties', 'Properties'),
 			properties: [],
-			property: {
-				propertylabel: null,
-			},
 		}
 	},
 	computed: {
@@ -56,30 +59,28 @@ export default {
 			const res = await axios.get(url)
 			this.properties = res.data
 		},
-		async removeProperty(id) {
+		async deleteProperty(id) {
 			const url = generateUrl(`/apps/customproperties/customproperties/${id}`)
 			await axios.delete(url)
 			await this.getDataFromApi()
+			showSuccess(this.t('customproperties', 'Custom Property has been deleted!'))
 		},
 		async updateProperty(customProperty) {
 			const url = generateUrl('/apps/customproperties/customproperties')
 			await axios.post(url, { customProperty })
 			await this.getDataFromApi()
+			showSuccess(this.t('customproperties', 'Custom Property has been changed!'))
 		},
-		async createProperty(property) {
-			const propertylabel = property.propertylabel
-			if (this.isBlank(propertylabel)) {
-				showError(t('customproperties', 'Property has to have a name!'))
-			}
+		async createProperty(customProperty) {
 			const url = generateUrl('/apps/customproperties/customproperties')
-			await axios.put(url, {
-				propertylabel,
-			})
-			await this.getDataFromApi()
-			this.property.propertylabel = null
-		},
-		isBlank(str) {
-			return (!str || /^\s*$/.test(str))
+			try {
+				await axios.put(url, { customProperty })
+				await this.getDataFromApi()
+				showSuccess(this.t('customproperties', 'New Custom Property has been added!'))
+			} catch (e) {
+				console.error(e)
+				showError(t('customproperties', 'Error saving property, please check constraints.'))
+			}
 		},
 	},
 }

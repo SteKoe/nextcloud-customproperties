@@ -38,9 +38,10 @@ class CustomPropertiesControllerTest extends TestCase
     {
         $this->expectExceptionObject(new CustomPropertyInvalidError());
 
-        $customProperty = new CustomProperty();
-        $customProperty->setPropertyname($propertyname);
-        $customProperty->setPropertytype($propertytype);
+        $customProperty = [
+            "propertyname" => $propertyname,
+            "propertytype" => $propertytype,
+        ];
 
         $this->controller->create($customProperty);
     }
@@ -54,6 +55,12 @@ class CustomPropertiesControllerTest extends TestCase
         $customProperty->setPropertyname("propertyname");
         $customProperty->setPropertylabel("I Am A Label");
         $customProperty->setPropertytype("text");
+
+        $customProperty = [
+            "propertyname" => "propertyname",
+            "propertylabel" => "I Am A Label",
+            "propertytype" => "texxt",
+        ];
 
         $this->controller->create($customProperty);
     }
@@ -72,11 +79,12 @@ class CustomPropertiesControllerTest extends TestCase
             ->method('update')
             ->willReturnArgument(0);
 
-        $changedProperty = new CustomProperty();
-        $changedProperty->setId(1);
-        $changedProperty->setPropertyname("propertyname");
-        $changedProperty->setPropertylabel("I Am A Label");
-        $changedProperty->setPropertytype("date");
+        $changedProperty = [
+            "id" => 1,
+            "propertyname" => "propertyname",
+            "propertylabel" => "I Am A Label",
+            "propertytype" => "texxt",
+        ];
 
         $actual = $this->controller->update($changedProperty);
         $this->assertEquals("propertyname", $actual->propertyname);

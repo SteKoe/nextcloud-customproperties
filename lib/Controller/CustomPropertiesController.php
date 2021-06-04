@@ -30,11 +30,7 @@ class CustomPropertiesController extends Controller
      */
     public function index(): JSONResponse
     {
-        $res = $this->customPropertiesMapper->findAll();
-        $entities = array_map(function ($prop) {
-            $prop->propertyname = "oc:" . $prop->propertyname;
-            return $prop;
-        }, $res);
+        $entities = $this->customPropertiesMapper->findAll();
         return new JSONResponse($entities);
     }
 
@@ -43,13 +39,18 @@ class CustomPropertiesController extends Controller
      * @param string $propertylabel
      * @return CustomProperty|Entity
      */
-    public function create(CustomProperty $customProperty): Entity
+    public function create(array $customProperty): Entity
     {
-        if (!$customProperty->isValid()) {
+        $newCustomProperty = new CustomProperty();
+        $newCustomProperty->setPropertyname($customProperty['propertyname']);
+        $newCustomProperty->setPropertylabel($customProperty['propertylabel']);
+        $newCustomProperty->setPropertytype($customProperty['propertytype']);
+
+        if (!$newCustomProperty->isValid()) {
             throw new CustomPropertyInvalidError();
         }
 
-        return $this->customPropertiesMapper->insert($customProperty);
+        return $this->customPropertiesMapper->insert($newCustomProperty);
     }
 
     /**
@@ -57,16 +58,16 @@ class CustomPropertiesController extends Controller
      * @param CustomProperty $customProperty
      * @return CustomProperty|Entity
      */
-    public function update(CustomProperty $customProperty): Entity
+    public function update(array $customProperty)
     {
-        if (!$customProperty->isValid()) {
+        $entity = $this->customPropertiesMapper->findById($customProperty['id']);
+
+        $entity->setPropertyname($customProperty['propertyname']);
+        $entity->setPropertylabel($customProperty['propertylabel']);
+
+        if (!$entity->isValid()) {
             throw new CustomPropertyInvalidError();
         }
-
-        $entity = $this->customPropertiesMapper->findById($customProperty->id);
-
-        $entity->setPropertyname($customProperty->propertyname);
-        $entity->setPropertylabel($customProperty->propertylabel);
 
         return $this->customPropertiesMapper->update($entity);
     }
@@ -74,9 +75,9 @@ class CustomPropertiesController extends Controller
     /**
      * @NoCSRFRequired
      * @param int $id
-     * @return CustomProperty
+     * @return CustomProperty|Entity
      */
-    public function delete(int $id): CustomProperty
+    public function delete(int $id)
     {
         $customProperty = $this->customPropertiesMapper->findById($id);
         return $this->customPropertiesMapper->delete($customProperty);
