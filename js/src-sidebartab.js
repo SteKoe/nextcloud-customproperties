@@ -25028,7 +25028,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (OCA.Files && OCA.Files.Sidebar) {
     OCA.Files.Sidebar.registerTab(new OCA.Files.Sidebar.Tab({
       id: 'customproperties',
-      name: t('properties', 'Properties'),
+      name: t('customproperties', 'Properties'),
       icon: 'icon-info',
 
       async mount(el, fileInfo, context) {
@@ -25059,4 +25059,4 @@ window.addEventListener('DOMContentLoaded', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=src-sidebartab.js.map?v=407934007bab535d4d1a
+//# sourceMappingURL=src-sidebartab.js.map?v=f7c993a512da251f4907

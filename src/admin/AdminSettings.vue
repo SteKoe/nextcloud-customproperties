@@ -3,19 +3,22 @@
 		<h2>{{ t('customproperties', 'Custom Properties') }}</h2>
 		<p class="settings-hint">
 			{{
-				t('customproperties', 'Custom properties defined here are available to all users. They are shown in "Properties" tab in sidebar view. They can be accessed via WebDAV. Deleting properties will not wipe property values.')
+				t('customproperties', 'Custom Properties defined here are available to all users. They are shown in "Properties" tab in sidebar view. They can be accessed via WebDAV. Deleting properties will not wipe property values.')
 			}}
 		</p>
 		<div>
 			<CreateCustomPropertyForm @createProperty="createProperty" />
 
 			<hr>
-			<template v-for="property in properties">
-				<EditCustomPropertyForm :key="property.id"
-					:property="property"
-					@deleteProperty="deleteProperty"
-					@updateProperty="updateProperty" />
+			<template v-if="properties.length > 0">
+				<template v-for="property in properties">
+					<EditCustomPropertyForm :key="property.id"
+						:property="property"
+						@deleteProperty="deleteProperty"
+						@updateProperty="updateProperty" />
+				</template>
 			</template>
+			<div v-else class="customproperty-empty" v-text="t('customproperties', 'No Custom Properties defined, yet.')" />
 		</div>
 	</section>
 </template>
@@ -38,7 +41,7 @@ export default {
 		return {
 			icon: 'icon-info',
 			loading: true,
-			name: t('properties', 'Properties'),
+			name: t('customproperties', 'Properties'),
 			properties: [],
 		}
 	},
@@ -85,3 +88,11 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+.customproperty-empty {
+  border: 1px solid var(--color-border-dark);
+  padding: .5rem 1rem;
+  color: #ccc;
+}
+</style>

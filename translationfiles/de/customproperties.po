@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-06-04 21:05+0200\n"
+"POT-Creation-Date: 2021-06-05 09:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,40 +17,47 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialAppInfoFakeDummyForL10nScript.php:2
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:1
+#: /var/www/html/apps/customproperties/specialAppInfoFakeDummyForL10nScript.php:2
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:1
 msgid "Custom Properties"
 msgstr ""
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialAppInfoFakeDummyForL10nScript.php:3
+#: /var/www/html/apps/customproperties/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "Files app plugin to add custom properties to files and folders"
 msgstr "Plugin, welches in der Seitenleiste das Betrachten und Verwalten von benutzerdefinierten Metadaten ermöglicht."
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:2
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:2
 msgid ""
-"Custom properties defined here are available to all users. They are shown in "
+"Custom Properties defined here are available to all users. They are shown in "
 "\"Properties\" tab in sidebar view. They can be accessed via WebDAV. "
 "Deleting properties will not wipe property values."
-msgstr ""
+msgstr "Hier definierte Metadaten sind öffentlich und für alle Benutzer verwendbar. "
+"Sie werden pro Benutzer und Element in der Seitenleiste angezeigt. Sie können zusätzlich "
+"via WebDAV aberufen werden. Das Löschen von Einträgen in dieser Liste entfernt nicht den Wert "
+"an den jeweiligen Dateien, sondern ausschließlich die Eingabemaske in der Seitenleiste."
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:3
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/src/sidebartab.js:17
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:3
+msgid "No Custom Properties defined, yet."
+msgstr "Es wurden noch keine benutzerdefinierten Metadaten angelegt."
+
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:4
+#: /var/www/html/apps/customproperties/src/sidebartab.js:17
 msgid "Properties"
 msgstr "Metadaten"
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:4
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:5
 msgid "Custom Property has been deleted!"
 msgstr "Benutzerdefiniertes Metadatum wurde entfernt!"
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:5
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:6
 msgid "Custom Property has been changed!"
 msgstr "Benutzerdefiniertes Metadatum wurde geändert!"
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:6
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:7
 msgid "New Custom Property has been added!"
 msgstr "Neues, benutzerdefiniertes Metadatum wurde angelegt!"
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:7
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:8
 msgid "Error saving property, please check constraints."
 msgstr "Fehler beim Speichern. Bitte die Vorgaben überprüfen!"
 
@@ -58,27 +65,27 @@ msgstr "Fehler beim Speichern. Bitte die Vorgaben überprüfen!"
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:9
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:14
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:10
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:15
 msgid "Cannot create Custom Property. The given input is invalid."
 msgstr "Das benutzerdefinierte Metadatum konnte nicht angelegt werden. Die eingegebenen Informationen sind ungültig."
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:10
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:11
 msgid "Name..."
 msgstr "Name..."
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:11
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:12
 msgid "Label..."
 msgstr "Bezeichnung..."
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:12
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:13
 msgid "Update"
 msgstr "Speichern"
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:13
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:14
 msgid "Delete"
 msgstr "Löschen"
 
-#: /Users/stephankoeninger/workspaces/nextcloud-customproperties/specialVueFakeDummyForL10nScript.js:15
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:16
 msgid "WebDAV properties"
 msgstr "WebDAV-Metadaten"

@@ -14,7 +14,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	if (OCA.Files && OCA.Files.Sidebar) {
 		OCA.Files.Sidebar.registerTab(new OCA.Files.Sidebar.Tab({
 			id: 'customproperties',
-			name: t('properties', 'Properties'),
+			name: t('customproperties', 'Properties'),
 			icon: 'icon-info',
 
 			async mount(el, fileInfo, context) {
