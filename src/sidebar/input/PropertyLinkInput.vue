@@ -7,14 +7,17 @@
 				v-model="property_.propertyvalue"
 				:name="property_.propertyname"
 				class="customproperty-form-control"
-				type="text"
+				type="url"
 				@blur="blur"
 				@focus="focus">
 
 			<div class="customproperty-input-group-append">
-				<a class="customproperty-input-group-text icon-link"
-					:href="property_.propertyvalue"
-					target="_blank" />
+				<div class="customproperty-input-group-text">
+					<a class="customproperty-link icon-link"
+						aria-label="follow-link"
+						:href="property_.propertyvalue"
+						target="_blank" />
+				</div>
 			</div>
 		</div>
 	</div>
@@ -54,3 +57,10 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+.customproperty-link[href=''],
+.customproperty-link:not([href]) {
+  opacity: 0.2;
+}
+</style>
