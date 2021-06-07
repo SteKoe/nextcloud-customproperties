@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { translate, translatePlural } from '@nextcloud/l10n'
 
-import Sidebar from './sidebar/Sidebar.vue'
+import Sidebar from './views/sidebar/Sidebar.vue'
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural

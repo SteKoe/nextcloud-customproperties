@@ -1,11 +1,15 @@
 <template>
 	<div :class="{ 'icon-loading': loading }">
-		<PropertyList :properties="properties.knownProperties" @propertyChanged="updateProperty($event)" />
+		<div v-show="!loading">
+			<h3>{{ t('customproperties', 'Custom Properties') }}</h3>
+			<PropertyList :properties="properties.knownProperties" @propertyChanged="updateProperty($event)" />
+			<EmptyPropertiesPlaceholder v-if="properties.knownProperties.length === 0" />
 
-		<template v-if="properties.otherProperties.length > 0">
-			<h3>{{ t('customproperties', 'WebDAV properties') }}</h3>
-			<PropertyList :disabled="true" :properties="properties.otherProperties" />
-		</template>
+			<template v-if="properties.otherProperties.length > 0">
+				<h3>{{ t('customproperties', 'WebDAV properties') }}</h3>
+				<PropertyList :disabled="true" :properties="properties.otherProperties" />
+			</template>
+		</div>
 	</div>
 </template>
 
@@ -14,10 +18,14 @@ import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import PropertyList from './PropertyList'
+import EmptyPropertiesPlaceholder from '../../components/emptypropertiesplaceholder/EmptyPropertiesPlaceholder'
 
 export default {
 	name: 'Sidebar',
-	components: { PropertyList },
+	components: {
+		EmptyPropertiesPlaceholder,
+		PropertyList,
+	},
 	data() {
 		return {
 			fileInfo: {},
@@ -30,7 +38,6 @@ export default {
 	},
 	methods: {
 		async update(fileInfo) {
-
 			this.properties.knownProperties = []
 			this.properties.otherProperties = []
 
@@ -68,21 +75,31 @@ export default {
 			this.loading = false
 		},
 		async retrieveCustomProperties() {
-			const customPropertiesUrl = generateUrl('/apps/customproperties/customproperties')
-			const customPropertiesResponse = await axios.get(customPropertiesUrl)
-			return customPropertiesResponse.data
+			try {
+				const customPropertiesUrl = generateUrl('/apps/customproperties/customproperties')
+				const customPropertiesResponse = await axios.get(customPropertiesUrl)
+				return customPropertiesResponse.data
+			} catch (e) {
+				console.error('Error retrieving custom properties', e)
+				return []
+			}
 		},
 		async retrieveProps() {
-			const uid = getCurrentUser().uid
-			const path = `/files/${uid}/${this.fileInfo.path}/${this.fileInfo.name}`.replace(/\/+/ig, '/')
-			const url = generateRemoteUrl('dav') + path
-			const result = await axios.request({
-				method: 'PROPFIND',
-				url,
-				data: '<d:propfind xmlns:d="DAV:"></d:propfind>',
-			})
+			try {
+				const uid = getCurrentUser().uid
+				const path = `/files/${uid}/${this.fileInfo.path}/${this.fileInfo.name}`.replace(/\/+/ig, '/')
+				const url = generateRemoteUrl('dav') + path
+				const result = await axios.request({
+					method: 'PROPFIND',
+					url,
+					data: '<d:propfind xmlns:d="DAV:"></d:propfind>',
+				})
 
-			return xmlToTagList(result.data)
+				return xmlToTagList(result.data)
+			} catch (e) {
+				console.error('Error retrieving properties', e)
+				return []
+			}
 		},
 		async updateProperty(property) {
 			const uid = getCurrentUser().uid
@@ -101,8 +118,6 @@ export default {
            </d:set>
           </d:propertyupdate>`,
 			})
-
-			await this.updateInternal()
 		},
 	},
 }
@@ -165,7 +180,13 @@ const xmlToTagList = (xmlString) => {
 	if (json['d:multistatus']) {
 		const list = json['d:multistatus']['d:response']
 
-		let listElement = list['d:propstat']
+		let listElement
+		if (Array.isArray(list)) {
+			listElement = list[0]['d:propstat']
+		} else {
+			listElement = list['d:propstat']
+		}
+
 		listElement = Array.isArray(listElement) ? listElement : [listElement]
 		return [...listElement]
 			.filter(propstat => propstat['d:status']['#text'] === 'HTTP/1.1 200 OK')

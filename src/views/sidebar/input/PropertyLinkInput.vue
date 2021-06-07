@@ -8,8 +8,7 @@
 				:name="property_.propertyname"
 				class="customproperty-form-control"
 				type="url"
-				@blur="blur"
-				@focus="focus">
+				@blur="blur">
 
 			<div class="customproperty-input-group-append">
 				<div class="customproperty-input-group-text">
@@ -41,18 +40,12 @@ export default {
 	},
 	data() {
 		return {
-			value: undefined,
 			property_: this.property,
 		}
 	},
 	methods: {
-		focus() {
-			this.value = this.property.propertyvalue
-		},
 		blur() {
-			if (this.value !== this.property.propertyvalue) {
-				this.$emit('blur', this.property)
-			}
+			this.$emit('blur', this.property_)
 		},
 	},
 }

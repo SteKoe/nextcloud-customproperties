@@ -18,7 +18,7 @@
 						@updateProperty="updateProperty" />
 				</template>
 			</template>
-			<div v-else class="customproperty-empty" v-text="t('customproperties', 'No Custom Properties defined, yet.')" />
+			<EmptyPropertiesPlaceholder v-else />
 		</div>
 	</section>
 </template>
@@ -28,12 +28,14 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import '@nextcloud/dialogs/styles/toast.scss'
-import CreateCustomPropertyForm from './customPropertyForm/CreateCustomPropertyForm'
-import EditCustomPropertyForm from './customPropertyForm/EditCustomPropertyForm'
+import CreateCustomPropertyForm from '../../components/customPropertyForm/CreateCustomPropertyForm'
+import EditCustomPropertyForm from '../../components/customPropertyForm/EditCustomPropertyForm'
+import EmptyPropertiesPlaceholder from '../../components/emptypropertiesplaceholder/EmptyPropertiesPlaceholder'
 
 export default {
 	name: 'AdminSettings',
 	components: {
+		EmptyPropertiesPlaceholder,
 		EditCustomPropertyForm,
 		CreateCustomPropertyForm,
 	},

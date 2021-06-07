@@ -8,6 +8,7 @@ use OCA\CustomProperties\Db\Property;
 use OCA\CustomProperties\Service\PropertyService;
 use OCA\DAV\Connector\Sabre\Node;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
@@ -58,6 +59,26 @@ class SabreServerPluginTest extends TestCase
         $this->plugin->propPatch($path, $propPatch);
         $propPatch->commit();
     }
+
+    function testPropPatchCallsMethodToDeletePropertyFromDatabaseWhenEmptyValueIsSet()
+    {
+        $path = "example.txt";
+        $propertyvalue = "   ";
+        $propertyname = "{" . Application::NAMESPACE_URL . "}propertyname";
+
+        $this->propertyService->expects($this->exactly(1))
+            ->method('deleteProperty')
+            ->with(
+                $this->equalTo($path),
+                $this->equalTo($propertyname),
+                $this->equalTo("4711")
+            );
+
+        $propPatch = new PropPatch([$propertyname => $propertyvalue]);
+        $this->plugin->propPatch($path, $propPatch);
+        $propPatch->commit();
+    }
+
 
     function testPropPatchIsNotExecutedWhenFileDoesNotExist()
     {
@@ -145,7 +166,7 @@ class SabreServerPluginTest extends TestCase
         $this->propertyService->method('getCustomProperty')
             ->willReturn($property);
 
-        $this->plugin = new CustomPropertiesSabreServerPlugin($this->propertyService, 4711);
+        $this->plugin = new CustomPropertiesSabreServerPlugin($this->propertyService, 4711, $this->createMock(LoggerInterface::class));
 
         $tree = $this->createMock(Tree::class);
         $node = $this->getMockBuilder(Node::class)

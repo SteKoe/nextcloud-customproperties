@@ -5,6 +5,7 @@ namespace OCA\CustomProperties\AppInfo;
 
 use OCA\CustomProperties\Listener\LoadAdditionalScriptsListener;
 use OCA\CustomProperties\Listener\SabreAddPluginListener;
+use OCA\CustomProperties\Plugin\SearchProvider;
 use OCA\CustomProperties\Storage\AuthorStorage;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCP\AppFramework\App;
@@ -33,6 +34,8 @@ class Application extends App implements IBootstrap
             'OCA\DAV\Connector\Sabre::addPlugin',
             SabreAddPluginListener::class
         );
+
+        $context->registerSearchProvider(SearchProvider::class);
     }
 
     public function boot(IBootContext $context): void

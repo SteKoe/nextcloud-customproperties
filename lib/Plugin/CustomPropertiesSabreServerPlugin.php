@@ -6,11 +6,13 @@ use OCA\CustomProperties\AppInfo\Application;
 use OCA\CustomProperties\Db\CustomProperty;
 use OCA\CustomProperties\Service\PropertyService;
 use OCA\DAV\Connector\Sabre\Node;
+use Psr\Log\LoggerInterface;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
 use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
+use function PHPUnit\Framework\isEmpty;
 
 class CustomPropertiesSabreServerPlugin extends ServerPlugin
 {
@@ -29,9 +31,11 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
      * @var CustomProperty[]
      */
     private array $customPropertyDefinitions;
+    private LoggerInterface $logger;
 
-    public function __construct(PropertyService $propertyService, $userId)
+    public function __construct(PropertyService $propertyService, $userId, LoggerInterface $logger)
     {
+        $this->logger = $logger;
         $this->propertyService = $propertyService;
         $this->userId = $userId;
 
@@ -65,8 +69,7 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
 
             if ($propFind->isAllProps()) {
                 $this->handlePropFindAllProps($propFind, $path);
-            }
-            else {
+            } else {
                 $this->handlePropFind($propFind, $path);
             }
         }
@@ -90,7 +93,11 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
         $propPatch->handle($this->getCustomPropertynames(), function ($a) use ($path) {
             try {
                 foreach ($a as $key => $value) {
-                    $this->propertyService->upsertProperty($path, $key, $value, $this->userId);
+                    if(!empty(trim($value))) {
+                        $this->propertyService->upsertProperty($path, $key, $value, $this->userId);
+                    } else {
+                        $this->propertyService->deleteProperty($path, $key, $this->userId);
+                    }
                 }
                 return true;
             } catch (\Exception $e) {

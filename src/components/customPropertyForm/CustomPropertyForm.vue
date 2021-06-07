@@ -2,7 +2,7 @@
 	<div class="input-group">
 		<input :value="property_.id"
 			type="hidden">
-		<div class="form-group">
+		<div class="form-group form-group__propertytype">
 			<select
 				v-model="property_.propertytype"
 				:disabled="disabled.includes('propertytype')"
@@ -15,7 +15,7 @@
 					v-text="t('customproperties', type.name)" />
 			</select>
 		</div>
-		<div class="form-group">
+		<div class="form-group form-group__propertyname">
 			<input
 				v-model="property_.propertyname"
 				:disabled="disabled.includes('propertyname')"
@@ -26,7 +26,7 @@
 				required
 				type="text">
 		</div>
-		<div class="form-group">
+		<div class="form-group form-group__propertylabel">
 			<input
 				v-model="property_.propertylabel"
 				:disabled="disabled.includes('propertylabel')"
@@ -81,12 +81,31 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .form-horizontal .input-group {
   display: flex;
 }
 
-.propertylabel {
-  width: 400px;
+.propertytype { margin-right: 3px; }
+
+.propertytype, .propertyname, .propertylabel {
+  width: 100%;
+}
+
+.form-group {
+  flex: 1 1 0;
+  margin-right: 3px;
+
+  &__propertytype {
+    flex: 0 0 75px;
+  }
+
+  &__propertyname {
+    flex: 0 0 50px;
+  }
+
+  &__propertylabel {
+    flex: 4 0 0;
+  }
 }
 </style>

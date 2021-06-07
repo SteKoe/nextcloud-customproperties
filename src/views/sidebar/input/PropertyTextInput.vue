@@ -10,8 +10,7 @@
 				:name="property_.propertyname"
 				:type="property_.propertytype"
 				class="customproperty-form-control"
-				@blur="blur"
-				@focus="focus">
+				@blur="blur">
 		</div>
 	</div>
 </template>
@@ -35,17 +34,11 @@ export default {
 	data() {
 		return {
 			property_: this.property,
-			value: undefined,
 		}
 	},
 	methods: {
-		focus() {
-			this.value = this.property.propertyvalue
-		},
 		blur() {
-			if (this.value !== this.property.propertyvalue) {
-				this.$emit('blur', this.property)
-			}
+			this.$emit('blur', this.property_)
 		},
 	},
 }

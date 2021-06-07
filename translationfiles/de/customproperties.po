@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-06-05 09:08+0000\n"
+"POT-Creation-Date: 2021-06-05 09:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,8 +19,9 @@ msgstr ""
 
 #: /var/www/html/apps/customproperties/specialAppInfoFakeDummyForL10nScript.php:2
 #: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:1
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:16
 msgid "Custom Properties"
-msgstr ""
+msgstr "Benutzerdefinierte Metadaten"
 
 #: /var/www/html/apps/customproperties/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "Files app plugin to add custom properties to files and folders"
@@ -35,10 +36,6 @@ msgstr "Hier definierte Metadaten sind öffentlich und für alle Benutzer verwen
 "Sie werden pro Benutzer und Element in der Seitenleiste angezeigt. Sie können zusätzlich "
 "via WebDAV aberufen werden. Das Löschen von Einträgen in dieser Liste entfernt nicht den Wert "
 "an den jeweiligen Dateien, sondern ausschließlich die Eingabemaske in der Seitenleiste."
-
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:3
-msgid "No Custom Properties defined, yet."
-msgstr "Es wurden noch keine benutzerdefinierten Metadaten angelegt."
 
 #: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:4
 #: /var/www/html/apps/customproperties/src/sidebartab.js:17
@@ -85,6 +82,10 @@ msgstr "Speichern"
 #: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:14
 msgid "Delete"
 msgstr "Löschen"
+
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:3
+msgid "No Custom Properties defined, yet."
+msgstr "Es wurden noch keine benutzerdefinierten Metadaten angelegt."
 
 #: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:16
 msgid "WebDAV properties"

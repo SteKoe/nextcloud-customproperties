@@ -3,45 +3,27 @@
 namespace OCA\CustomProperties\Db;
 
 use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\IMapperException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\IDBConnection;
-use Psr\Log\LoggerInterface;
 
 class PropertiesMapper extends QBMapper
 {
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param IDBConnection $db
      */
-    public function __construct(IDBConnection $db, LoggerInterface $logger)
+    public function __construct(IDBConnection $db)
     {
         parent::__construct($db, 'properties', Property::class);
-        $this->logger = $logger;
-    }
-
-    public function findAllByPath(string $propertypath, string $uid)
-    {
-        $qb = $this->db->getQueryBuilder();
-
-        $q = $qb->select('*')
-            ->from($this->tableName)
-            ->where($qb->expr()->eq('propertypath', $qb->createNamedParameter($propertypath)))
-            ->andWhere($qb->expr()->eq('userid', $qb->createNamedParameter($uid)));
-
-        return $this->findEntities($q);
     }
 
     /**
      * @param string $propertypath
      * @param string $propertyname
-     * @param string $userid
-     * @return Property|null
+     * @param string $uid
+     * @return Entity|null
      */
-    public function findByPathAndName(string $propertypath, string $propertyname, string $userid): ?Entity
+    public function findByPathAndName(string $propertypath, string $propertyname, string $uid): ?Entity
     {
         $qb = $this->db->getQueryBuilder();
 
@@ -49,27 +31,56 @@ class PropertiesMapper extends QBMapper
             ->from($this->tableName)
             ->where($qb->expr()->eq('propertypath', $qb->createNamedParameter($propertypath)))
             ->andWhere($qb->expr()->eq('propertyname', $qb->createNamedParameter($propertyname)))
-            ->andWhere($qb->expr()->eq('userid', $qb->createNamedParameter($userid)));
+            ->andWhere($qb->expr()->eq('userid', $qb->createNamedParameter($uid)));
 
         try {
             return $this->findEntity($q);
-        } catch (\Exception $e) {
+        } catch (IMapperException $e) {
             return null;
         }
     }
 
     /**
+     * @param string $propertyvalue
+     * @param string $uid
      * @return Property[]
      */
-    public function findByPathStartsWith(string $propertypath): array
+    public function findByPropertyValueLike(string $propertyvalue, string $uid, int $offset = 0, int $limit = 50): array
     {
         $qb = $this->db->getQueryBuilder();
 
-        $IParameter = $qb->createNamedParameter(substr($propertypath, 1) . '%');
         $q = $qb->select('*')
             ->from($this->tableName)
-            ->where($qb->expr()->like('propertypath', $IParameter));
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->orderBy('propertypath', 'DESC')
+            ->addOrderBy('propertyname', 'DESC')
+            ->where($qb->expr()->iLike('propertyvalue', $qb->createNamedParameter("%" . $propertyvalue . "%")))
+            ->andWhere($qb->expr()->eq('userid', $qb->createNamedParameter($uid)));
 
         return $this->findEntities($q);
     }
+
+    /**
+     * @param string $propertyvalue
+     * @param string $uid
+     * @return Property[]
+     */
+    public function findByPropertyNameLikeAndPropertyValueLike(string $propertyname, string $propertyvalue, string $uid, int $offset = 0, int $limit = 50): array
+    {
+        $qb = $this->db->getQueryBuilder();
+
+        $q = $qb->select('*')
+            ->from($this->tableName)
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->orderBy('propertypath', 'DESC')
+            ->addOrderBy('propertyvalue', 'DESC')
+            ->where($qb->expr()->iLike('propertyname', $qb->createNamedParameter("%" . $propertyname . "%")))
+            ->andwhere($qb->expr()->iLike('propertyvalue', $qb->createNamedParameter("%" . $propertyvalue . "%")))
+            ->andWhere($qb->expr()->eq('userid', $qb->createNamedParameter($uid)));
+
+        return $this->findEntities($q);
+    }
+
 }

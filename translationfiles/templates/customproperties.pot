@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-06-05 09:08+0000\n"
+"POT-Creation-Date: 2021-06-05 09:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,7 @@ msgstr ""
 
 #: /var/www/html/apps/customproperties/specialAppInfoFakeDummyForL10nScript.php:2
 #: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:1
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:16
 msgid "Custom Properties"
 msgstr ""
 
@@ -34,55 +35,55 @@ msgid ""
 msgstr ""
 
 #: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:3
-msgid "No Custom Properties defined, yet."
-msgstr ""
-
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:4
 #: /var/www/html/apps/customproperties/src/sidebartab.js:17
 msgid "Properties"
 msgstr ""
 
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:5
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:4
 msgid "Custom Property has been deleted!"
 msgstr ""
 
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:6
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:5
 msgid "Custom Property has been changed!"
 msgstr ""
 
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:7
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:6
 msgid "New Custom Property has been added!"
 msgstr ""
 
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:8
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:7
 msgid "Error saving property, please check constraints."
 msgstr ""
 
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:9
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:8
 msgid "Add"
 msgstr ""
 
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:10
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:15
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:9
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:14
 msgid "Cannot create Custom Property. The given input is invalid."
 msgstr ""
 
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:11
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:10
 msgid "Name..."
 msgstr ""
 
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:12
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:11
 msgid "Label..."
 msgstr ""
 
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:13
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:12
 msgid "Update"
 msgstr ""
 
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:14
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:13
 msgid "Delete"
 msgstr ""
 
-#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:16
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:15
+msgid "No Custom Properties defined, yet."
+msgstr ""
+
+#: /var/www/html/apps/customproperties/specialVueFakeDummyForL10nScript.js:17
 msgid "WebDAV properties"
 msgstr ""

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { translate, translatePlural } from '@nextcloud/l10n'
 
-import AdminSettings from './admin/AdminSettings.vue'
+import AdminSettings from './views/admin/AdminSettings.vue'
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural

@@ -15,10 +15,12 @@ class SabreAddPluginListener implements IEventListener
      * @var PropertyService
      */
     private $propertyService;
+    private LoggerInterface $logger;
 
-    public function __construct(PropertyService $propertyService)
+    public function __construct(PropertyService $propertyService, LoggerInterface $logger)
     {
         $this->propertyService = $propertyService;
+        $this->logger = $logger;
     }
 
     public function handle(Event $event): void
@@ -27,7 +29,8 @@ class SabreAddPluginListener implements IEventListener
             $server = $event->getServer();
             $server->addPlugin(new CustomPropertiesSabreServerPlugin(
                 $this->propertyService,
-                \OC_User::getUser()
+                \OC_User::getUser(),
+                $this->logger
             ));
         }
     }

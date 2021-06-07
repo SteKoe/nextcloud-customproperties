@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/vue'
 import PropertyLinkInput from './PropertyLinkInput'
-import { render } from '../../test-tools'
+import { render } from '../../../test-tools'
 
 describe('PropertyList.vue', () => {
 	async function renderWithProperty(property) {
