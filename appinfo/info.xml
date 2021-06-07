@@ -1,10 +1,18 @@
 <?xml version="1.0"?>
-<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
     <id>customproperties</id>
     <name>Custom Properties</name>
     <summary>Files app plugin to add custom properties to files and folders</summary>
-    <description>Files app plugin to add custom properties to files and folders</description>
+    <description><![CDATA[
+        DAV's `PROPPATCH` request type allows adding custom properties to items.
+        Since custom properties are not accessible via the frontend, this plugin will list all properties of an item in
+        the sidebar.
+        The plugin allows to define "well-known" properties in the admin settings which are presented as input fields in
+        the "properties" tab in files app sidebar.
+        Changing the property in the tab will also change the DAV property and hence it will be possible to access the
+        properties via DAV call `PROPFIND`.
+        ]]></description>
     <version>2.0.0</version>
     <licence>apache</licence>
     <author mail="nextcloud@stekoe.de">SteKoe</author>
@@ -12,8 +20,15 @@
     <category>files</category>
     <category>organization</category>
     <bugs>https://github.com/SteKoe/nextcloud-customproperties/issues</bugs>
+    <screenshot>
+        https://raw.githubusercontent.com/SteKoe/nextcloud-customproperties/main/.readme/adminsettings.png
+    </screenshot>
+    <screenshot>
+        https://raw.githubusercontent.com/SteKoe/nextcloud-customproperties/main/.readme/sidebartab.png
+    </screenshot>
     <dependencies>
-        <nextcloud min-version="20" max-version="22"/>
+        <php min-version="7.0" />
+        <nextcloud min-version="20" max-version="22" />
     </dependencies>
     <settings>
         <admin>OCA\CustomProperties\Settings\AdminSettings</admin>
