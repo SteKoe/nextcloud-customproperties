@@ -2,81 +2,86 @@
 
 namespace OCA\CustomProperties\Controller;
 
-use Exception;
+use OCA\CustomProperties\AppInfo\Application;
 use OCA\CustomProperties\Db\CustomPropertiesMapper;
-use OCA\CustomProperties\Db\PropertiesMapper;
-use OCA\CustomProperties\Db\Property;
-use OCA\CustomProperties\Service\PropertyService;
+use OCA\CustomProperties\Db\CustomProperty;
+use OCA\CustomProperties\Error\CustomPropertyInvalidError;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\ILogger;
 use OCP\IRequest;
 
 class CustomPropertiesController extends Controller
 {
-    const NS_PREFIX = "{http://owncloud.org/ns}";
-
-    /**
-     * @var PropertyService
-     */
-    private $propertyService;
     /**
      * @var CustomPropertiesMapper
      */
     private $customPropertiesMapper;
-    /**
-     * @var PropertiesMapper
-     */
-    private $propertiesMapper;
-    /**
-     * @var ILogger
-     */
-    private $logger;
-    private $userId;
 
-    public function __construct($AppName, IRequest $request, PropertyService $propertyService, CustomPropertiesMapper $customPropertiesMapper, PropertiesMapper $propertiesMapper, ILogger $logger, $UserId)
+    public function __construct($AppName, IRequest $request, CustomPropertiesMapper $customPropertiesMapper)
     {
         parent::__construct($AppName, $request);
-        $this->propertyService = $propertyService;
         $this->customPropertiesMapper = $customPropertiesMapper;
-        $this->propertiesMapper = $propertiesMapper;
-        $this->logger = $logger;
-        $this->userId = $UserId;
     }
 
     /**
      * @NoAdminRequired
      * @NoCSRFRequired
-     * @param string $path
-     * @param string $name
      * @return JSONResponse
      */
-    public function index(string $path, string $name): JSONResponse
+    public function index(): JSONResponse
     {
-        $res = $this->propertyService->getProperties($this->userId, $path, $name);
-        return new JSONResponse($res);
+        $entities = $this->customPropertiesMapper->findAll();
+        return new JSONResponse($entities);
     }
 
     /**
-     * @NoAdminRequired
      * @NoCSRFRequired
+     * @param string $propertylabel
+     * @return CustomProperty|Entity
      */
-    public function update(string $propertypath, string $propertyname, string $propertyvalue): Property
+    public function create(array $customProperty): Entity
     {
-        $propertyname = CustomPropertiesController::NS_PREFIX . $propertyname;
+        $newCustomProperty = new CustomProperty();
+        $newCustomProperty->setPropertyname($customProperty['propertyname']);
+        $newCustomProperty->setPropertylabel($customProperty['propertylabel']);
+        $newCustomProperty->setPropertytype($customProperty['propertytype']);
 
-        try {
-            $res = $this->propertiesMapper->findByPathAndName($propertypath, $propertyname, $this->userId);
-            $res->setPropertyvalue($propertyvalue);
-            return $this->propertiesMapper->update($res);
-        } catch (Exception $exception) {
-            $property = new Property();
-            $property->setUserid($this->userId);
-            $property->setPropertypath($propertypath);
-            $property->setPropertyname($propertyname);
-            $property->setPropertyvalue($propertyvalue);
-
-            return $this->propertiesMapper->insert($property);
+        if (!$newCustomProperty->isValid()) {
+            throw new CustomPropertyInvalidError();
         }
+
+        return $this->customPropertiesMapper->insert($newCustomProperty);
     }
+
+    /**
+     * @NoCSRFRequired
+     * @param CustomProperty $customProperty
+     * @return CustomProperty|Entity
+     */
+    public function update(array $customProperty)
+    {
+        $entity = $this->customPropertiesMapper->findById($customProperty['id']);
+
+        $entity->setPropertyname($customProperty['propertyname']);
+        $entity->setPropertylabel($customProperty['propertylabel']);
+
+        if (!$entity->isValid()) {
+            throw new CustomPropertyInvalidError();
+        }
+
+        return $this->customPropertiesMapper->update($entity);
+    }
+
+    /**
+     * @NoCSRFRequired
+     * @param int $id
+     * @return CustomProperty|Entity
+     */
+    public function delete(int $id)
+    {
+        $customProperty = $this->customPropertiesMapper->findById($id);
+        return $this->customPropertiesMapper->delete($customProperty);
+    }
+
 }

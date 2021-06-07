@@ -1,32 +1,45 @@
 <?php
+declare(strict_types=1);
 
 namespace OCA\CustomProperties\AppInfo;
 
+use OCA\CustomProperties\Listener\LoadAdditionalScriptsListener;
+use OCA\CustomProperties\Listener\SabreAddPluginListener;
+use OCA\CustomProperties\Plugin\SearchProvider;
+use OCA\CustomProperties\Storage\AuthorStorage;
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCP\AppFramework\App;
-use OCP\AppFramework\QueryException;
-use OCP\Util;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
 
-class Application extends App
+class Application extends App implements IBootstrap
 {
-    const APP_NAME = 'customproperties';
+    const APP_ID = 'customproperties';
+    const NAMESPACE_URL = "http://owncloud.org/ns";
+    const NAMESPACE_PREFIX = "oc";
 
-    /**
-     * Application constructor.
-     *
-     * @param array $params
-     * @throws QueryException
-     */
-    public function __construct(array $params = [])
+    public function __construct(array $urlParams = [])
     {
-        parent::__construct(self::APP_NAME, $params);
+        parent::__construct(self::APP_ID, $urlParams);
+    }
 
-        $container = $this->getContainer();
-        $server = $container->getServer();
-        $eventDispatcher = $server->getEventDispatcher();
+    public function register(IRegistrationContext $context): void
+    {
+        $context->registerEventListener(
+            LoadAdditionalScriptsEvent::class,
+            LoadAdditionalScriptsListener::class
+        );
+        $context->registerEventListener(
+            'OCA\DAV\Connector\Sabre::addPlugin',
+            SabreAddPluginListener::class
+        );
 
-        $eventDispatcher->addListener('OCA\Files::loadAdditionalScripts', function () {
-            Util::addStyle('customproperties', 'sidebartab');
-            Util::addScript('customproperties', 'sidebartab');
-        });
+        $context->registerSearchProvider(SearchProvider::class);
+    }
+
+    public function boot(IBootContext $context): void
+    {
+        // NOOP
     }
 }

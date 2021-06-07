@@ -1,14 +1,13 @@
 import Vue from 'vue'
-import AdminSettings from './AdminSettings.vue'
+import { translate, translatePlural } from '@nextcloud/l10n'
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.OC = OC
-Vue.prototype.OCA = OCA
+import AdminSettings from './views/admin/AdminSettings.vue'
 
-window.addEventListener('DOMContentLoaded', () => {
-	new Vue({
-		el: "#customproperties_settings",
-		render: h => h(AdminSettings)
-	})
+Vue.prototype.t = translate
+Vue.prototype.n = translatePlural
+
+// eslint-disable-next-line no-new
+export default new Vue({
+	el: '#customproperties_settings',
+	render: h => h(AdminSettings),
 })

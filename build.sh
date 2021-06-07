@@ -4,6 +4,8 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+NEXTCLOUD_VERSION=21
+
 main() {
   local version
   version=$1
@@ -38,7 +40,7 @@ signSource() {
 
   rm -rf customproperties/.git customproperties/src
 
-  cid=$(docker run -d -v $(pwd)/customproperties:/app -v ~/.nextcloud/certificates/:/nextcloud/certificates/ nextcloud)
+  cid=$(docker run -d -v $(pwd)/customproperties:/app -v ~/.nextcloud/certificates/:/nextcloud/certificates/ nextcloud:$NEXTCLOUD_VERSION)
   echo "Sign sources using container '$cid'..."
 
   echo "Waiting for NextCloud to be initialized..."

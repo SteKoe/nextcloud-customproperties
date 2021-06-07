@@ -1,5 +1,4 @@
 <?php
-script('customproperties', 'adminsettings');
-style('customproperties', 'adminsettings');
+script('customproperties', 'src-adminsettings');
 ?>
 <section id="customproperties_settings" class="section"></section>

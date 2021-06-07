@@ -2,14 +2,15 @@
 
 namespace OCA\CustomProperties\Service;
 
-use OC\Files\Filesystem;
 use OCA\CustomProperties\Db\CustomPropertiesMapper;
+use OCA\CustomProperties\Db\CustomProperty;
 use OCA\CustomProperties\Db\PropertiesMapper;
+use OCA\CustomProperties\Db\Property;
+use OCP\AppFramework\Db\Entity;
+use Sabre\DAV\Server;
 
 class PropertyService
 {
-    const NS_PREFIX = "{http://owncloud.org/ns}";
-
     /**
      * @var CustomPropertiesMapper
      */
@@ -18,70 +19,64 @@ class PropertyService
      * @var PropertiesMapper
      */
     private $propertiesMapper;
+    private Server $server;
 
     public function __construct(
         CustomPropertiesMapper $customPropertiesMapper,
-        PropertiesMapper $propertiesMapper
+        PropertiesMapper $propertiesMapper,
+        Server $server
     )
     {
         $this->customPropertiesMapper = $customPropertiesMapper;
         $this->propertiesMapper = $propertiesMapper;
+        $this->server = $server;
     }
 
-    private static function normalizeProperty($prop)
-    {
-        $propertyname = str_replace(self::NS_PREFIX, "", $prop->getPropertyname());
-        $propertyvalue = isset($prop->propertyvalue) ? $prop->propertyvalue : "";
-        $propertylabel = isset($prop->propertylabel) ? $prop->propertylabel : $propertyname;
-
-        return array(
-            "propertyname" => $propertyname,
-            "propertyvalue" => $propertyvalue,
-            "propertylabel" => $propertylabel
-        );
+    /**
+     * @param $propertypath
+     * @param $propertyname
+     * @param $userid
+     * @return Property
+     */
+    function getCustomProperty(string $propertypath, string $propertyname, string $userid): ?Entity {
+        return $this->propertiesMapper->findByPathAndName($propertypath, $propertyname, $userid);
     }
 
-    function getProperties($userId, $path, $name)
+    /**
+     * @param string $propertypath
+     * @param string $propertyname
+     * @param string $propertyvalue
+     * @return Property|Entity
+     * @throws \OCP\DB\Exception
+     */
+    public function upsertProperty(string $propertypath, string $propertyname, string $propertyvalue, string $userid)
     {
-        $customProperties = $this->customPropertiesMapper->findAllForUser($userId);
-        $propertypath = ltrim(Filesystem::normalizePath("files/$userId/$path/$name"), "/");
-        $properties = $this->propertiesMapper->findAllByPath($propertypath, $userId);
-
-        // Normalize the properties
-        $customProperties = array_map('self::normalizeProperty', $customProperties);
-        $properties = array_map('self::normalizeProperty', $properties);
-
-        $mergedProperties = self::merge_properties($customProperties, $properties);
-        foreach ($mergedProperties as $key => $mergedProperty) {
-            $mergedProperties[$key]['_knownproperty'] = self::find_property_with_name($customProperties, $mergedProperty['propertyname']) !== -1;
-        }
-        return $mergedProperties;
-    }
-
-    private static function merge_properties(array $customProperties, array $properties)
-    {
-        $result = $customProperties;
-
-        foreach ($properties as $customProperty) {
-            $index = self::find_property_with_name($result, $customProperty['propertyname']);
-            if ($index === -1) {
-                $result[] = $customProperty;
-            } else {
-                $result[$index]['propertyvalue'] = $customProperty['propertyvalue'];
-            }
+        $res = $this->propertiesMapper->findByPathAndName($propertypath, $propertyname, $userid);
+        if (!is_null($res)) {
+            $res->setPropertyvalue($propertyvalue);
+            return $this->propertiesMapper->update($res);
         }
 
-        return $result;
+        $property = new Property();
+        $property->setUserid($userid);
+        $property->setPropertypath($propertypath);
+        $property->setPropertyname($propertyname);
+        $property->setPropertyvalue($propertyvalue);
+
+        return $this->propertiesMapper->insert($property);
     }
 
-    private static function find_property_with_name(array $arr, string $name)
+    public function deleteProperty(string $propertypath, string $propertyname, string $userid): Entity
     {
-        foreach ($arr as $idx => $prop) {
-            if ($prop['propertyname'] === $name) {
-                return $idx;
-            }
-        }
+        $res = $this->propertiesMapper->findByPathAndName($propertypath, $propertyname, $userid);
+        return $this->propertiesMapper->delete($res);
+    }
 
-        return -1;
+    /**
+     * @return CustomProperty[]
+     */
+    public function findCustomPropertyDefinitions(): array
+    {
+        return $this->customPropertiesMapper->findAll();
     }
 }

@@ -1,0 +1,62 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "AGPL",
+  "private": true,
+  "engines": {
+    "node": ">=14.7.0"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production webpack --progress --config webpack.config.js",
+    "dev": "NODE_ENV=development webpack --progress --config webpack.config.js",
+    "watch": "NODE_ENV=development webpack --progress --watch --config webpack.config.js",
+    "test": "npm-run-all --parallel test:js test:php",
+    "test:js": "jest --env=jsdom",
+    "test:php": "docker-compose exec app phpunit --bootstrap tests/bootstrap.php tests/.",
+    "lint:fix": "npm-run-all --parallel eslint:fix stylelint:fix",
+    "eslint": "eslint --ext .js,.vue src",
+    "eslint:fix": "eslint --ext .js,.vue src --fix",
+    "stylelint": "stylelint src",
+    "stylelint:fix": "stylelint src --fix",
+    "generate:i10n": "docker-compose exec app translationtool convert-po-files"
+  },
+  "browserslist": [
+    "extends @nextcloud/browserslist-config"
+  ],
+  "dependencies": {
+    "@nextcloud/auth": "^1.3.0",
+    "@nextcloud/axios": "^1.6.0",
+    "@nextcloud/dialogs": "^3.1.2",
+    "@nextcloud/l10n": "^1.4.1",
+    "@nextcloud/router": "^1.0.2",
+    "@nextcloud/vue": "^3.9.0",
+    "vue": "^2.6.12",
+    "vuelidate": "^0.7.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.4",
+    "@nextcloud/browserslist-config": "^2.1.0",
+    "@nextcloud/eslint-config": "^5.1.0",
+    "@nextcloud/eslint-plugin": "^2.0.0",
+    "@nextcloud/webpack-vue-config": "^4.0.3",
+    "@testing-library/user-event": "^13.1.9",
+    "@testing-library/vue": "^5.6.2",
+    "@vue/test-utils": "^1.2.0",
+    "assert": "^2.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^27.0.2",
+    "jest": "^27.0.3",
+    "jest-environment-jsdom": "^27.0.3",
+    "npm-run-all": "^4.1.5",
+    "stylelint": "^13.13.1",
+    "stylelint-config-recommended-scss": "^4.2.0",
+    "stylelint-config-standard": "^22.0.0",
+    "vue-jest": "^3.0.7",
+    "vue-loader": "^15.9.7",
+    "vue-template-compiler": "^2.6.12"
+  }
+}

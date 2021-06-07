@@ -2,6 +2,7 @@
 
 namespace OCA\CustomProperties\Db;
 
+use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\IDBConnection;
 
@@ -15,6 +16,9 @@ class CustomPropertiesMapper extends QBMapper
         parent::__construct($db, 'customproperties', CustomProperty::class);
     }
 
+    /**
+     * @throws \OCP\DB\Exception
+     */
     public function findAllForUser($userId)
     {
         $qb = $this->db->getQueryBuilder();
@@ -27,7 +31,14 @@ class CustomPropertiesMapper extends QBMapper
         return $this->findEntities($qb);
     }
 
-    public function findById(int $id)
+    /**
+     * @param int $id
+     * @return CustomProperty|Entity
+     * @throws \OCP\AppFramework\Db\DoesNotExistException
+     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+     * @throws \OCP\DB\Exception
+     */
+    public function findById(int $id): Entity
     {
         $qb = $this->db->getQueryBuilder();
 
@@ -38,7 +49,11 @@ class CustomPropertiesMapper extends QBMapper
         return $this->findEntity($qb);
     }
 
-    public function findAll()
+    /**
+     * @return CustomProperty[]|array
+     * @throws \OCP\DB\Exception
+     */
+    public function findAll(): array
     {
         $qb = $this->db->getQueryBuilder();
 
