@@ -27,6 +27,7 @@ export default {
 	mixins: [validationMixin],
 	model: {
 		prop: 'property',
+		event: 'change',
 	},
 	props: {
 		property: {
@@ -34,10 +35,10 @@ export default {
 			required: true,
 		},
 	},
-	data() {
-		return {
-			property_: this.property,
-		}
+	computed: {
+		property_() {
+			return this.property
+		},
 	},
 	methods: {
 		submit(e) {

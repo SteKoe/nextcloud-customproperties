@@ -37,6 +37,7 @@ export default {
 				showError(this.t('customproperties', 'Cannot create Custom Property. The given input is invalid.'))
 				return
 			}
+
 			this.$emit('createProperty', this.property)
 			this.property = {
 				propertyname: null,

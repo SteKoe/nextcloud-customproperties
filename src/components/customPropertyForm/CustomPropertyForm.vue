@@ -44,6 +44,7 @@ export default {
 	name: 'CustomPropertyForm',
 	model: {
 		prop: 'property',
+		event: 'change',
 	},
 	props: {
 		property: {
@@ -57,26 +58,22 @@ export default {
 	},
 	data() {
 		return {
-			property_: this.property,
 			propertytypes: [
-				{
-					name: 'Text',
-					value: 'text',
-				},
-				{
-					name: 'URL / Link',
-					value: 'url',
-				},
-				{
-					name: 'Date',
-					value: 'date',
-				},
-				{
-					name: 'Number',
-					value: 'number',
-				},
+				{ name: 'Text', value: 'text' },
+				{ name: 'URL / Link', value: 'url' },
+				{ name: 'Date', value: 'date' },
+				{ name: 'Date-Time', value: 'datetime-local' },
+				{ name: 'Week', value: 'week' },
+				{ name: 'Month', value: 'month' },
+				{ name: 'Time', value: 'time' },
+				{ name: 'Number', value: 'number' },
 			],
 		}
+	},
+	computed: {
+	  property_() {
+	    return this.property
+		},
 	},
 }
 </script>
