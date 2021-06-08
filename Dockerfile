@@ -1,6 +1,7 @@
 FROM nextcloud
 
-RUN apt-get update && apt-get install -y wget gettext
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get update && apt-get install -y wget gettext libxml2-utils nodejs && rm -rf /var/lib/apt/lists/*
 
 RUN wget -O /usr/local/bin/phpunit https://phar.phpunit.de/phpunit-9.phar \
     && chmod +x /usr/local/bin/phpunit

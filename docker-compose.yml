@@ -6,7 +6,6 @@ volumes:
 services:
   db:
     image: mariadb
-    restart: always
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     ports:
       - 3306:3306
@@ -24,10 +23,5 @@ services:
     volumes:
       - ../nextcloud-server:/var/www/html
       - ./:/var/www/html/apps/customproperties
-    environment:
-      - NEXTCLOUD_ADMIN_USER=admin
-      - NEXTCLOUD_ADMIN_PASSWORD=admin
-      - MYSQL_PASSWORD=nextcloud
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
-      - MYSQL_HOST=db
+      - /Users/stephankoeninger/.nextcloud:/.nextcloud
+
