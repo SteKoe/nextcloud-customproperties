@@ -44,16 +44,16 @@ jobs:
           ln -s nextcloud-customproperties customproperties
           touch customproperties_${{ env.VERSION }}.tar.gz
           tar -zvchf  customproperties_${{ env.VERSION }}.tar.gz \
-              --exclude='customproperties/node_modules/' \
-              --exclude='customproperties/.git/' \
-              --exclude='customproperties/.github/' \
-              --exclude='customproperties/.build/' \
-              --exclude='customproperties/.cache/' \
-              --exclude='customproperties/.idea/' \
-              --exclude='customproperties/.github/' \
-              --exclude='customproperties/translationfiles/' \
-              --exclude='customproperties/src/' \
-              --exclude='customproperties/tests/' \
+              --exclude='customproperties/node_modules' \
+              --exclude='customproperties/.git' \
+              --exclude='customproperties/.github' \
+              --exclude='customproperties/.build' \
+              --exclude='customproperties/.cache' \
+              --exclude='customproperties/.idea' \
+              --exclude='customproperties/.github' \
+              --exclude='customproperties/translationfiles' \
+              --exclude='customproperties/src' \
+              --exclude='customproperties/tests' \
               customproperties/
 
           mv customproperties_${{ env.VERSION }}.tar.gz ./nextcloud-customproperties
