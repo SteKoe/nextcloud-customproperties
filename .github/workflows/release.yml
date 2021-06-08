@@ -56,7 +56,7 @@ jobs:
 
           tar -tvf customproperties_${{ env.VERSION }}.tar.gz
 
-          mv customproperties_${{ env.VERSION }}.tar.gz ./qnextcloud-customproperties
+          mv customproperties_${{ env.VERSION }}.tar.gz ./nextcloud-customproperties
       - name: Sign
         run: |
           echo "${{ secrets.PRIVATE_KEY }}" > privatekey.pem
