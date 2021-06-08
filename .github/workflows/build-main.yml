@@ -30,6 +30,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Install required dependencies
         run: sudo apt-get update && sudo apt-get install --no-install-recommends openssl sqlite libpq-dev libmysql++-dev libxml2-utils
       - name: Write Version
@@ -37,4 +38,5 @@ jobs:
           echo "VERSION=$(xmllint --xpath 'string(/info/version)' appinfo/info.xml)" >> $GITHUB_ENV
       - name: Use the value
         run: |
+          ls -la
           echo "${{ env.action_state }}"
