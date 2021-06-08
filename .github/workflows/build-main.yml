@@ -34,7 +34,10 @@ jobs:
       - name: Install required dependencies
         run: sudo apt-get update && sudo apt-get install --no-install-recommends openssl sqlite libpq-dev libmysql++-dev libxml2-utils
       - name: Determine version
-        run: echo "VERSION=$(xmllint --xpath 'string(/info/version)' appinfo/info.xml)" > version.txt >> $GITHUB_ENV
+        run: |
+          VERSION=$(xmllint --xpath 'string(/info/version)' appinfo/info.xml)
+          echo "$VERSION" > version.txt
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
       - name: Create archive
         run: |
           env
@@ -68,7 +71,9 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
       - name: Determine version
-        run: echo "VERSION=$(cat artifact/version.txt)" > version.txt >> $GITHUB_ENV
+        run: |
+          VERSION=$(cat ./artifact/version.txt)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
       - name: release
         uses: actions/create-release@v1
         id: create_release
@@ -85,7 +90,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: artifact/customproperties_${{ env.VERSION }}.tar.gz
+          asset_path: ./artifact/customproperties_${{ env.VERSION }}.tar.gz
           asset_name: customproperties_${{ env.VERSION }}.tar.gz
           asset_content_type: application/tar+gzip
       - name: Upload Signature
@@ -94,6 +99,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: artifact/signature.txt
+          asset_path: ./artifact/signature.txt
           asset_name: signature.txt
           asset_content_type: plain.txt
