@@ -52,6 +52,7 @@ jobs:
               --exclude='./.cache/' \
               --exclude='./.idea/' \
               --exclude='./.github/' \
+              customproperties/
 
           tar -tvf customproperties_${{ env.VERSION }}.tar.gz
 
