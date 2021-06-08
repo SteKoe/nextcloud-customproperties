@@ -63,6 +63,7 @@ jobs:
           openssl dgst -sha512 -sign privatekey.pem customproperties_${{ env.VERSION }}.tar.gz | openssl base64 > signature.txt
       - uses: actions/upload-artifact@v2
         with:
+          if-no-files-found: error
           path: |
             version.txt
             customproperties_${{ env.VERSION }}.tar.gz
