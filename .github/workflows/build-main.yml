@@ -38,7 +38,9 @@ jobs:
           echo "VERSION=$(xmllint --xpath 'string(/info/version)' appinfo/info.xml)" >> $GITHUB_ENV
       - name: Create archive
         run: |
+          touch customproperties_$VERSION.tar.gz
           tar -czf customproperties_$VERSION.tar.gz \
+              --exclude=customproperties_$VERSION.tar.gz
               --exclude='./node_modules/' \
               --exclude='./.git/' \
               --exclude='./.github/' \
