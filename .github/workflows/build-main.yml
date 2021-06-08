@@ -2,31 +2,31 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    name: Test JS
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "14.x"
-      - run: npm ci
-      - run: npm run test:js
-
-  build:
-    name: Build JS
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "14.x"
-      - run: npm ci
-      - run: npm run build
+#  test:
+#    name: Test
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: actions/setup-node@v1
+#        with:
+#          node-version: "14.x"
+#      - run: npm ci
+#      - run: npm run test:js
+#
+#  build:
+#    name: Build
+#    needs: test
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: actions/setup-node@v1
+#        with:
+#          node-version: "14.x"
+#      - run: npm ci
+#      - run: npm run build
 
   sign:
-    name: Sign Package
+    name: Sign
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -51,4 +51,7 @@ jobs:
               .
       - name: Sign
         run: |
-          openssl dgst -sha512 -sign ${{ secrets.PRIVATE_KEY }} customproperties_$VERSION.tar.gz | openssl base64
+          echo "$PRIVATE_KEY" > privatekey.pem
+          openssl dgst -sha512 -sign privatekey.pem customproperties_$VERSION.tar.gz | openssl base64
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
