@@ -40,10 +40,11 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
       - name: Create archive
         run: |
-          env
+          cd ..
+          ln -s nextcloud-customproperties customproperties
           touch customproperties_${{ env.VERSION }}.tar.gz
           tar --exclude=customproperties_${{ env.VERSION }}.tar.gz \
-              -zcf  customproperties_${{ env.VERSION }}.tar.gz \
+              -zchf  customproperties_${{ env.VERSION }}.tar.gz \
               --exclude='./node_modules/' \
               --exclude='./.git/' \
               --exclude='./.github/' \
@@ -51,7 +52,10 @@ jobs:
               --exclude='./.cache/' \
               --exclude='./.idea/' \
               --exclude='./.github/' \
-              .
+
+          tar -tvf customproperties_${{ env.VERSION }}.tar.gz
+
+          mv customproperties_${{ env.VERSION }}.tar.gz ./qnextcloud-customproperties
       - name: Sign
         run: |
           echo "${{ secrets.PRIVATE_KEY }}" > privatekey.pem
