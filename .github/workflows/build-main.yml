@@ -71,19 +71,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
-        with:
-          name: version
-          path: version.txt
-      - name: Determine version
-        run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
-      - uses: actions/download-artifact@v2
-        with:
-          name: archive
-          path: customproperties_${{ env.VERSION }}.tar.gz
-      - uses: actions/download-artifact@v2
-        with:
-          name: signature
-          path: signature.txt
+      - name: Display structure of downloaded files
+        run: ls -R
       - name: release
         uses: actions/create-release@v1
         id: create_release
