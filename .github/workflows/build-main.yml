@@ -26,17 +26,27 @@ jobs:
       - run: npm run build
 
   sign:
-    name: Sign App
+    name: Sign Package
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Install required dependencies
         run: sudo apt-get update && sudo apt-get install --no-install-recommends openssl sqlite libpq-dev libmysql++-dev libxml2-utils
-      - name: Write Version
+      - name: Determine version
         run: |
           echo "VERSION=$(xmllint --xpath 'string(/info/version)' appinfo/info.xml)" >> $GITHUB_ENV
-      - name: Use the value
+      - name: Create archive
         run: |
-          ls -la
-          echo "${{ env.VERSION }}"
+          tar -czf customproperties_$VERSION.tar.gz \
+              --exclude='./node_modules/' \
+              --exclude='./.git/' \
+              --exclude='./.github/' \
+              --exclude='./.build/' \
+              --exclude='./.cache/' \
+              --exclude='./.idea/' \
+              --exclude='./.github/' \
+              .
+      - name: Sign
+        run: |
+          openssl dgst -sha512 -sign ${{ secrets.PRIVATE_KEY }} customproperties_$VERSION.tar.gz | openssl base64
