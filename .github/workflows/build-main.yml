@@ -15,6 +15,7 @@ jobs:
 
   build:
     name: Build JS
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
