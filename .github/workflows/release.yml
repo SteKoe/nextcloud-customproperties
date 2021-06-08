@@ -1,0 +1,107 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - run: npm ci
+      - run: npm run test:js
+
+  build:
+    name: Build
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - run: npm ci
+      - run: npm run build
+
+  sign:
+    name: Sign
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install required dependencies
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends openssl sqlite libpq-dev libmysql++-dev libxml2-utils
+      - name: Determine version
+        run: |
+          VERSION=$(xmllint --xpath 'string(/info/version)' appinfo/info.xml)
+          echo "$VERSION" > version.txt
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Create archive
+        run: |
+          cd ..
+          ln -s nextcloud-customproperties customproperties
+          touch customproperties_${{ env.VERSION }}.tar.gz
+          tar --exclude=customproperties_${{ env.VERSION }}.tar.gz \
+              -zchf  customproperties_${{ env.VERSION }}.tar.gz \
+              --exclude='./node_modules/' \
+              --exclude='./.git/' \
+              --exclude='./.github/' \
+              --exclude='./.build/' \
+              --exclude='./.cache/' \
+              --exclude='./.idea/' \
+              --exclude='./.github/' \
+              customproperties/
+
+          tar -tvf customproperties_${{ env.VERSION }}.tar.gz
+
+          mv customproperties_${{ env.VERSION }}.tar.gz ./qnextcloud-customproperties
+      - name: Sign
+        run: |
+          echo "${{ secrets.PRIVATE_KEY }}" > privatekey.pem
+          openssl dgst -sha512 -sign privatekey.pem customproperties_${{ env.VERSION }}.tar.gz | openssl base64 > signature.txt
+      - uses: actions/upload-artifact@v2
+        with:
+          path: |
+            version.txt
+            customproperties_${{ env.VERSION }}.tar.gz
+            signature.txt
+
+  release:
+    needs: sign
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Determine version
+        run: |
+          VERSION=$(cat ./artifact/version.txt)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          release_name: v${{ env.VERSION }}
+          tag_name: v${{ env.VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Upload Package
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./artifact/customproperties_${{ env.VERSION }}.tar.gz
+          asset_name: customproperties_${{ env.VERSION }}.tar.gz
+          asset_content_type: application/tar+gzip
+      - name: Upload Signature
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./artifact/signature.txt
+          asset_name: signature.txt
+          asset_content_type: plain.txt

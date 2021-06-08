@@ -21,7 +21,8 @@
     "eslint:fix": "eslint --ext .js,.vue src --fix",
     "stylelint": "stylelint src",
     "stylelint:fix": "stylelint src --fix",
-    "generate:i10n": "docker-compose exec app translationtool convert-po-files"
+    "generate:i10n": "docker-compose exec app translationtool convert-po-files",
+    "sign-app": "docker-compose exec -u 33 app bash -c 'build.sh 2.0.0'"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"
@@ -57,6 +58,7 @@
     "stylelint-config-standard": "^22.0.0",
     "vue-jest": "^3.0.7",
     "vue-loader": "^15.9.7",
-    "vue-template-compiler": "^2.6.12"
+    "vue-template-compiler": "^2.6.12",
+    "webpack-cli": "^4.7.2"
   }
 }
