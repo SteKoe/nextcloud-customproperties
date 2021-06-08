@@ -38,9 +38,9 @@ jobs:
       - name: Create archive
         run: |
           env
-          touch customproperties_$VERSION.tar.gz
-          tar --exclude=customproperties_$VERSION.tar.gz \
-              -zcf  customproperties_$VERSION.tar.gz \
+          touch customproperties_${{ env.VERSION }}.tar.gz
+          tar --exclude=customproperties_${{ env.VERSION }}.tar.gz \
+              -zcf  customproperties_${{ env.VERSION }}.tar.gz \
               --exclude='./node_modules/' \
               --exclude='./.git/' \
               --exclude='./.github/' \
@@ -51,10 +51,8 @@ jobs:
               .
       - name: Sign
         run: |
-          echo "$PRIVATE_KEY" > privatekey.pem
-          openssl dgst -sha512 -sign privatekey.pem customproperties_$VERSION.tar.gz | openssl base64 > signature.txt
-        env:
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          echo "${{ secrets.PRIVATE_KEY }}" > privatekey.pem
+          openssl dgst -sha512 -sign privatekey.pem customproperties_${{ env.VERSION }}.tar.gz | openssl base64 > signature.txt
       - uses: actions/upload-artifact@v2
         with:
           name: version
@@ -62,7 +60,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: archive
-          path: customproperties_$VERSION.tar.gz
+          path: customproperties_${{ env.VERSION }}.tar.gz
       - uses: actions/upload-artifact@v2
         with:
           name: signature
@@ -89,7 +87,7 @@ jobs:
         with:
           draft: true
           prerelease: true
-          release_name: $VERSION
+          release_name: ${{ env.VERSION }}
           tag_name: ${{ github.ref }}
           body_path: CHANGELOG.md
         env:
