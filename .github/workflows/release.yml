@@ -43,18 +43,18 @@ jobs:
           cd ..
           ln -s nextcloud-customproperties customproperties
           touch customproperties_${{ env.VERSION }}.tar.gz
-          tar --exclude=customproperties_${{ env.VERSION }}.tar.gz \
-              -zchf  customproperties_${{ env.VERSION }}.tar.gz \
-              --exclude='./node_modules/' \
-              --exclude='./.git/' \
-              --exclude='./.github/' \
-              --exclude='./.build/' \
-              --exclude='./.cache/' \
-              --exclude='./.idea/' \
-              --exclude='./.github/' \
+          tar -zvchf  customproperties_${{ env.VERSION }}.tar.gz \
+              --exclude='customproperties/node_modules/' \
+              --exclude='customproperties/.git/' \
+              --exclude='customproperties/.github/' \
+              --exclude='customproperties/.build/' \
+              --exclude='customproperties/.cache/' \
+              --exclude='customproperties/.idea/' \
+              --exclude='customproperties/.github/' \
+              --exclude='customproperties/translationfiles/' \
+              --exclude='customproperties/src/' \
+              --exclude='customproperties/tests/' \
               customproperties/
-
-          tar -tvf customproperties_${{ env.VERSION }}.tar.gz
 
           mv customproperties_${{ env.VERSION }}.tar.gz ./nextcloud-customproperties
       - name: Sign
