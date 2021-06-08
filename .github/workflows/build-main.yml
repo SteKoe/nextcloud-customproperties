@@ -24,3 +24,17 @@ jobs:
           node-version: "14.x"
       - run: npm ci
       - run: npm run build
+
+  sign:
+    name: Sign App
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install required dependencies
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends openssl sqlite libpq-dev libmysql++-dev libxml2-utils
+      - name: Write Version
+        run: |
+          echo "VERSION=$(xmllint --xpath 'string(/info/version)' appinfo/info.xml)" >> $GITHUB_ENV
+      - name: Use the value
+        run: |
+          echo "${{ env.action_state }}"
