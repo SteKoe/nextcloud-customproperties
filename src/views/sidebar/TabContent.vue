@@ -1,8 +1,5 @@
 <template>
-	<Tab :id="id"
-		:icon="icon"
-		:name="name"
-		:class="{ 'icon-loading': loading }">
+	<div>
 		<div v-show="!loading">
 			<h3>{{ t('customproperties', 'Custom Properties') }}</h3>
 			<PropertyList :properties="properties.knownProperties" @propertyChanged="updateProperty($event)" />
@@ -13,36 +10,31 @@
 				<PropertyList :disabled="true" :properties="properties.otherProperties" />
 			</template>
 		</div>
-	</Tab>
+	</div>
 </template>
 
 <script>
-import axios from '@nextcloud/axios'
-import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import { getCurrentUser } from '@nextcloud/auth'
 import PropertyList from './PropertyList'
 import EmptyPropertiesPlaceholder from '../../components/emptypropertiesplaceholder/EmptyPropertiesPlaceholder'
-import Tab from '@nextcloud/vue/dist/Components/AppSidebarTab'
 import { isEmptyObject, xmlToTagList } from './utils'
+import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
+import axios from '@nextcloud/axios'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
-	name: 'Sidebar',
+	name: 'TabContent',
 	components: {
 		EmptyPropertiesPlaceholder,
 		PropertyList,
-		Tab,
 	},
 	props: {
 		fileInfo: {
 			type: Object,
 			default: () => {},
-			required: true,
 		},
 	},
 	data() {
-		return {
-			name: t('customproperties', 'Properties'),
-			icon: 'icon-info',
+	  return {
 			loading: true,
 			properties: {
 				knownProperties: [],
@@ -51,30 +43,23 @@ export default {
 		}
 	},
 	computed: {
-		id() {
-			return 'customproperties'
-		},
-
-		activeTab() {
-			return this.$parent.activeTab
+	  fileInfo_() {
+	    return this.fileInfo
 		},
 	},
-	watch: {
-		fileInfo(newFile, oldFile) {
-			if (newFile.id !== oldFile.id) {
-				this.update()
-			}
-		},
-	},
-	async beforeMount() {
+	async mounted() {
 		await this.update()
 	},
 	methods: {
+	  async updateFileInfo(fileInfo) {
+	    this.fileInfo_ = fileInfo
+			await this.update()
+		},
 		async update() {
 			this.properties.knownProperties = []
 			this.properties.otherProperties = []
 
-			if (!isEmptyObject(this.fileInfo)) {
+			if (!isEmptyObject(this.fileInfo_)) {
 				this.loading = true
 
 				const properties = await this.retrieveProps()
@@ -116,7 +101,7 @@ export default {
 		async retrieveProps() {
 			try {
 				const uid = getCurrentUser().uid
-				const path = `/files/${uid}/${this.fileInfo.path}/${this.fileInfo.name}`.replace(/\/+/ig, '/')
+				const path = `/files/${uid}/${this.fileInfo_.path}/${this.fileInfo_.name}`.replace(/\/+/ig, '/')
 				const url = generateRemoteUrl('dav') + path
 				const result = await axios.request({
 					method: 'PROPFIND',
@@ -132,7 +117,7 @@ export default {
 		},
 		async updateProperty(property) {
 			const uid = getCurrentUser().uid
-			const path = `/files/${uid}/${this.fileInfo.path}/${this.fileInfo.name}`.replace(/\/+/ig, '/')
+			const path = `/files/${uid}/${this.fileInfo_.path}/${this.fileInfo_.name}`.replace(/\/+/ig, '/')
 			const url = generateRemoteUrl('dav') + path
 			const propTag = `${property.prefix}:${property.propertyname}`
 			try {

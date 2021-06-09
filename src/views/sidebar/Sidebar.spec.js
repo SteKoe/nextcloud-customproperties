@@ -1,4 +1,4 @@
-import Sidebar, { isEmptyObject } from './Sidebar'
+import Sidebar, { isEmptyObject } from './SidebarTab'
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import axios from '@nextcloud/axios'
 import * as auth from '@nextcloud/auth'
@@ -11,7 +11,7 @@ jest.mock('@nextcloud/router')
 auth.getCurrentUser.mockReturnValue({ uid: 'stekoe' })
 router.generateRemoteUrl.mockImplementation((service) => service)
 
-describe('Sidebar.vue', () => {
+describe('SidebarTab.vue', () => {
 	let localVue
 	let wrapper
 
