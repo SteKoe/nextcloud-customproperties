@@ -7,7 +7,6 @@ use OCA\CustomProperties\Service\PropertyService;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\SabrePluginEvent;
-use Psr\Log\LoggerInterface;
 
 class SabreAddPluginListener implements IEventListener
 {
@@ -15,12 +14,15 @@ class SabreAddPluginListener implements IEventListener
      * @var PropertyService
      */
     private $propertyService;
-    private LoggerInterface $logger;
 
-    public function __construct(PropertyService $propertyService, LoggerInterface $logger)
+    /**
+     * SabreAddPluginListener constructor.
+     *
+     * @param PropertyService $propertyService
+     */
+    public function __construct(PropertyService $propertyService)
     {
         $this->propertyService = $propertyService;
-        $this->logger = $logger;
     }
 
     public function handle(Event $event): void
@@ -29,8 +31,7 @@ class SabreAddPluginListener implements IEventListener
             $server = $event->getServer();
             $server->addPlugin(new CustomPropertiesSabreServerPlugin(
                 $this->propertyService,
-                \OC_User::getUser(),
-                $this->logger
+                \OC_User::getUser()
             ));
         }
     }

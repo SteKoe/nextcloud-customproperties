@@ -19,17 +19,14 @@ class PropertyService
      * @var PropertiesMapper
      */
     private $propertiesMapper;
-    private Server $server;
 
     public function __construct(
         CustomPropertiesMapper $customPropertiesMapper,
-        PropertiesMapper $propertiesMapper,
-        Server $server
+        PropertiesMapper $propertiesMapper
     )
     {
         $this->customPropertiesMapper = $customPropertiesMapper;
         $this->propertiesMapper = $propertiesMapper;
-        $this->server = $server;
     }
 
     /**

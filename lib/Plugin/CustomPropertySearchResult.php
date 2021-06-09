@@ -6,8 +6,14 @@ use OCP\Files\Node;
 
 class CustomPropertySearchResult
 {
-    public Node $node;
-    public Property $property;
+    /**
+     * @var Node
+     */
+    public $node;
+    /**
+     * @var Property
+     */
+    public $property;
 
     public function __construct(Node $node, Property $property)
     {

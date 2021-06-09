@@ -24,6 +24,9 @@ class Application extends App implements IBootstrap
         parent::__construct(self::APP_ID, $urlParams);
     }
 
+    /**
+     * @param IRegistrationContext $context
+     */
     public function register(IRegistrationContext $context): void
     {
         $context->registerEventListener(
@@ -38,6 +41,9 @@ class Application extends App implements IBootstrap
         $context->registerSearchProvider(SearchProvider::class);
     }
 
+    /**
+     * @param IBootContext $context
+     */
     public function boot(IBootContext $context): void
     {
         // NOOP
