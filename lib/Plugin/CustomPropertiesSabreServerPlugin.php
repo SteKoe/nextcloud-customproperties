@@ -6,7 +6,6 @@ use OCA\CustomProperties\AppInfo\Application;
 use OCA\CustomProperties\Db\CustomProperty;
 use OCA\CustomProperties\Service\PropertyService;
 use OCA\DAV\Connector\Sabre\Node;
-use Psr\Log\LoggerInterface;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
@@ -30,18 +29,24 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
     /**
      * @var CustomProperty[]
      */
-    private array $customPropertyDefinitions;
-    private LoggerInterface $logger;
+    private $customPropertyDefinitions;
 
-    public function __construct(PropertyService $propertyService, $userId, LoggerInterface $logger)
+    /**
+     * CustomPropertiesSabreServerPlugin constructor.
+     * @param PropertyService $propertyService
+     * @param $userId
+     */
+    public function __construct(PropertyService $propertyService, $userId)
     {
-        $this->logger = $logger;
         $this->propertyService = $propertyService;
         $this->userId = $userId;
 
         $this->customPropertyDefinitions = $this->propertyService->findCustomPropertyDefinitions();
     }
 
+    /**
+     * @param Server $server
+     */
     public function initialize(Server $server)
     {
         $this->server = $server;
@@ -50,7 +55,7 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
         $this->server->on('propPatch', [$this, 'propPatch']);
     }
 
-    private function getCustomPropertynames()
+    private function getCustomPropertynames(): array
     {
         return array_map(function (CustomProperty $customProperty) {
             return "{" . Application::NAMESPACE_URL . "}" . $customProperty->propertyname;

@@ -30,7 +30,7 @@ class SabreServerPluginTest extends TestCase
     /**
      * @var PropertyService
      */
-    private PropertyService $propertyService;
+    private $propertyService;
 
     protected function setUp(): void
     {

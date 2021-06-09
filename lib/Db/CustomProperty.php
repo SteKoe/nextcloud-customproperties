@@ -16,8 +16,10 @@ class CustomProperty extends Entity
     /** @var string */
     public $propertytype;
 
-    public String $prefix = Application::NAMESPACE_PREFIX;
-    public String $namespaceURL = Application::NAMESPACE_URL;
+    /**
+     * @var string
+     */
+    public $prefix = Application::NAMESPACE_PREFIX;
 
     public function __construct()
     {
@@ -28,7 +30,8 @@ class CustomProperty extends Entity
         $this->addType('propertytype', 'string');
     }
 
-    public static function withNamespaceURI($propertyname): string {
+    public static function withNamespaceURI($propertyname): string
+    {
         return "{" . Application::NAMESPACE_URL . "}" . $propertyname;
     }
 

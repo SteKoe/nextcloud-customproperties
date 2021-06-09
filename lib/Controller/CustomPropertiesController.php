@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace OCA\CustomProperties\Controller;
 
@@ -18,6 +19,12 @@ class CustomPropertiesController extends Controller
      */
     private $customPropertiesMapper;
 
+    /**
+     * CustomPropertiesController constructor.
+     * @param $AppName
+     * @param IRequest $request
+     * @param CustomPropertiesMapper $customPropertiesMapper
+     */
     public function __construct($AppName, IRequest $request, CustomPropertiesMapper $customPropertiesMapper)
     {
         parent::__construct($AppName, $request);

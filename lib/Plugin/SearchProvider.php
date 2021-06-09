@@ -19,12 +19,36 @@ use OCP\Search\SearchResultEntry;
 
 class SearchProvider implements IProvider
 {
-    private IL10N $l10n;
-    private IURLGenerator $urlGenerator;
-    private IRootFolder $rootFolder;
-    private IMimeTypeDetector $mimeTypeDetector;
-    private PropertiesMapper $propertiesMapper;
+    /**
+     * @var IL10N
+     */
+    private $l10n;
+    /**
+     * @var IURLGenerator
+     */
+    private $urlGenerator;
+    /**
+     * @var IRootFolder
+     */
+    private $rootFolder;
+    /**
+     * @var IMimeTypeDetector
+     */
+    private $mimeTypeDetector;
+    /**
+     * @var PropertiesMapper
+     */
+    private $propertiesMapper;
 
+    /**
+     * SearchProvider constructor.
+     *
+     * @param IL10N $l10n
+     * @param IURLGenerator $urlGenerator
+     * @param IMimeTypeDetector $mimeTypeDetector
+     * @param IRootFolder $rootFolder
+     * @param PropertiesMapper $propertiesMapper
+     */
     public function __construct(IL10N $l10n,
                                 IURLGenerator $urlGenerator,
                                 IMimeTypeDetector $mimeTypeDetector,

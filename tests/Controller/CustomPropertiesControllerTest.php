@@ -11,7 +11,10 @@ use PHPUnit\Framework\TestCase;
 
 class CustomPropertiesControllerTest extends TestCase
 {
-    private CustomPropertiesController $controller;
+    /**
+     * @var CustomPropertiesController
+     */
+    private $controller;
     /**
      * @var CustomPropertiesMapper|\PHPUnit\Framework\MockObject\MockObject
      */
