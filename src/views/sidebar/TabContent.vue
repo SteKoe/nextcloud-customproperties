@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div :class="{ 'icon-loading': loading }">
 		<div v-show="!loading">
 			<h3>{{ t('customproperties', 'Custom Properties') }}</h3>
 			<PropertyList :properties="properties.knownProperties" @propertyChanged="updateProperty($event)" />
@@ -36,16 +36,12 @@ export default {
 	data() {
 	  return {
 			loading: true,
+			fileInfo_: this.fileInfo,
 			properties: {
 				knownProperties: [],
 				otherProperties: [],
 			},
 		}
-	},
-	computed: {
-	  fileInfo_() {
-	    return this.fileInfo
-		},
 	},
 	async mounted() {
 		await this.update()
@@ -58,11 +54,10 @@ export default {
 		async update() {
 			this.properties.knownProperties = []
 			this.properties.otherProperties = []
-
 			if (!isEmptyObject(this.fileInfo_)) {
 				this.loading = true
 
-				const properties = await this.retrieveProps()
+				const properties = await this.retrieveProps(this.fileInfo_)
 				const customProperties = await this.retrieveCustomProperties()
 				const customPropertyNames = customProperties.map(cp => `${cp.prefix}:${cp.propertyname}`)
 
@@ -98,10 +93,10 @@ export default {
 				return []
 			}
 		},
-		async retrieveProps() {
+		async retrieveProps(fileInfo) {
 			try {
 				const uid = getCurrentUser().uid
-				const path = `/files/${uid}/${this.fileInfo_.path}/${this.fileInfo_.name}`.replace(/\/+/ig, '/')
+				const path = `/files/${uid}/${fileInfo.path}/${fileInfo.name}`.replace(/\/+/ig, '/')
 				const url = generateRemoteUrl('dav') + path
 				const result = await axios.request({
 					method: 'PROPFIND',

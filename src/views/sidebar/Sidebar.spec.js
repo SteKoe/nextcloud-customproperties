@@ -1,8 +1,8 @@
-import Sidebar, { isEmptyObject } from './SidebarTab'
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import axios from '@nextcloud/axios'
 import * as auth from '@nextcloud/auth'
 import * as router from '@nextcloud/router'
+import TabContent from './TabContent'
 
 jest.mock('@nextcloud/axios')
 jest.mock('@nextcloud/auth')
@@ -17,17 +17,9 @@ describe('SidebarTab.vue', () => {
 
 	beforeEach(() => {
 		localVue = createLocalVue()
-		localVue.prototype.t = () => {}
-		wrapper = shallowMount(Sidebar, { localVue })
-	})
-
-	test.each`
-		obj
-		${{}}
-		${null}
-		${undefined}
-	`('"$obj" should be identified as empty object', ({ obj }) => {
-		expect(isEmptyObject(obj)).toBeTruthy()
+		localVue.prototype.t = () => {
+		}
+		wrapper = shallowMount(TabContent, { localVue })
 	})
 
 	test.each`
@@ -47,7 +39,7 @@ describe('SidebarTab.vue', () => {
 		axios.get.mockResolvedValue({ data: [] })
 		axios.request.mockResolvedValue({ data: {} })
 
-		await wrapper.vm.update({ name: 'example.txt' })
+		await wrapper.vm.updateFileInfo({ name: 'example.com' })
 
 		expect.assertions(2)
 		expect(axios.get).toHaveBeenCalledTimes(1)
