@@ -13,8 +13,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "14.x"
+      - uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - run: npm ci
-      - run: npm run test:js
+      - run: npm run test
 
   build:
     name: Build

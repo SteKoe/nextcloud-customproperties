@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  app:
+    image: ghcr.io/stekoe/nextcloud-docker-testing:main
+    ports:
+      - 80:80
+    volumes:
+#      - ../../nextcloud-server:/var/www/html
+      - ../:/var/www/html/apps/customproperties
+      - ~/.nextcloud:/.nextcloud
+
