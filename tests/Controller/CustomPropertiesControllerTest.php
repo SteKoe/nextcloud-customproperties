@@ -69,27 +69,6 @@ class CustomPropertiesControllerTest extends TestCase
         $this->controller->create($customProperty);
     }
 
-    public function test_createFailsWhenPropertynameAlreadyExisting() {
-        $this->expectException(CustomPropertyAlreadyExistsError::class);
-
-        $this->customPropertiesMapper->method('countByLabel')
-            ->with(1)
-            ->willReturn(1);
-
-        $customProperty = new CustomProperty();
-        $customProperty->setPropertyname("propertyname");
-        $customProperty->setPropertylabel("I Am A Label");
-        $customProperty->setPropertytype("text");
-
-        $customProperty = [
-            "propertyname" => "propertyname",
-            "propertylabel" => "I Am A Label",
-            "propertytype" => "texxt",
-        ];
-
-        $this->controller->create($customProperty);
-    }
-
     public function testUpdateWithValidCustomPropertyIsUpdated()
     {
         $existingProperty = new CustomProperty();

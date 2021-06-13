@@ -15,7 +15,7 @@
     "watch": "NODE_ENV=development webpack --progress --watch --config webpack.config.js",
     "test": "npm-run-all --parallel test:js test:php",
     "test:js": "jest --env=jsdom",
-    "test:php": "docker-compose exec app phpunit --bootstrap tests/bootstrap.php tests/.",
+    "test:php": "docker-compose -f infrastructure/docker-compose.yml run app phpunit --bootstrap tests/bootstrap.php apps/customproperties/tests/.",
     "lint:fix": "npm-run-all --parallel eslint:fix stylelint:fix",
     "eslint": "eslint --ext .js,.vue src",
     "eslint:fix": "eslint --ext .js,.vue src --fix",

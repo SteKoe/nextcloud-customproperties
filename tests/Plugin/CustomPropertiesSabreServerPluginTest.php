@@ -15,7 +15,7 @@ use Sabre\DAV\PropPatch;
 use Sabre\DAV\Server;
 use Sabre\DAV\Tree;
 
-class SabreServerPluginTest extends TestCase
+class CustomPropertiesSabreServerPluginTest extends TestCase
 {
     /**
      * @var CustomPropertiesSabreServerPlugin
@@ -154,6 +154,13 @@ class SabreServerPluginTest extends TestCase
         $this->assertEquals($this->createProperty(), $propFind->get($propertyname));
     }
 
+    function testWriterCanWriteProperties() {
+        $writer = $this->server->xml->getWriter();
+        $writer->openMemory();
+
+        $this->assertNotNull($writer->writeElement("test", self::createProperty()));
+    }
+
     /**
      * @param CustomProperty $customProperty
      * @throws \Sabre\DAV\Exception
@@ -185,7 +192,7 @@ class SabreServerPluginTest extends TestCase
     /**
      * @return CustomProperty
      */
-    protected function createCustomProperty(): CustomProperty
+    private function createCustomProperty(): CustomProperty
     {
         $customProperty = new CustomProperty();
         $customProperty->id = 1;
@@ -198,7 +205,7 @@ class SabreServerPluginTest extends TestCase
     /**
      * @return Property
      */
-    protected function createProperty(): Property
+    private function createProperty(): Property
     {
         $property = new Property();
         $property->propertyvalue = "value";

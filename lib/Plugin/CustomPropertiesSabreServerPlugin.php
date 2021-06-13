@@ -4,6 +4,7 @@ namespace OCA\CustomProperties\Plugin;
 
 use OCA\CustomProperties\AppInfo\Application;
 use OCA\CustomProperties\Db\CustomProperty;
+use OCA\CustomProperties\Db\Property;
 use OCA\CustomProperties\Service\PropertyService;
 use OCA\DAV\Connector\Sabre\Node;
 use Sabre\DAV\INode;
@@ -11,7 +12,7 @@ use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
 use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
-use function PHPUnit\Framework\isEmpty;
+use Sabre\Xml\Writer;
 
 class CustomPropertiesSabreServerPlugin extends ServerPlugin
 {
@@ -50,6 +51,10 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
     public function initialize(Server $server)
     {
         $this->server = $server;
+
+        $this->server->xml->classMap[Property::class] = function (Writer $writer, Property $value) {
+            $writer->write($value->propertyvalue);
+        };
 
         $this->server->on('propFind', [$this, 'propFind']);
         $this->server->on('propPatch', [$this, 'propPatch']);
@@ -98,7 +103,7 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
         $propPatch->handle($this->getCustomPropertynames(), function ($a) use ($path) {
             try {
                 foreach ($a as $key => $value) {
-                    if(!empty(trim($value))) {
+                    if (!empty(trim($value))) {
                         $this->propertyService->upsertProperty($path, $key, $value, $this->userId);
                     } else {
                         $this->propertyService->deleteProperty($path, $key, $this->userId);
