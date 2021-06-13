@@ -6,7 +6,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ../../nextcloud-server:/var/www/html
+#      - ../../nextcloud-server:/var/www/html
       - ../:/var/www/html/apps/customproperties
       - ~/.nextcloud:/.nextcloud
 
