@@ -5,6 +5,7 @@ namespace OCA\CustomProperties\Controller;
 use OCA\CustomProperties\AppInfo\Application;
 use OCA\CustomProperties\Db\CustomPropertiesMapper;
 use OCA\CustomProperties\Db\CustomProperty;
+use OCA\CustomProperties\Error\CustomPropertyAlreadyExistsError;
 use OCA\CustomProperties\Error\CustomPropertyInvalidError;
 use OCP\IRequest;
 use PHPUnit\Framework\TestCase;
@@ -53,6 +54,27 @@ class CustomPropertiesControllerTest extends TestCase
     {
         $this->customPropertiesMapper->expects(self::once())
             ->method('insert');
+
+        $customProperty = new CustomProperty();
+        $customProperty->setPropertyname("propertyname");
+        $customProperty->setPropertylabel("I Am A Label");
+        $customProperty->setPropertytype("text");
+
+        $customProperty = [
+            "propertyname" => "propertyname",
+            "propertylabel" => "I Am A Label",
+            "propertytype" => "texxt",
+        ];
+
+        $this->controller->create($customProperty);
+    }
+
+    public function test_createFailsWhenPropertynameAlreadyExisting() {
+        $this->expectException(CustomPropertyAlreadyExistsError::class);
+
+        $this->customPropertiesMapper->method('countByLabel')
+            ->with(1)
+            ->willReturn(1);
 
         $customProperty = new CustomProperty();
         $customProperty->setPropertyname("propertyname");
