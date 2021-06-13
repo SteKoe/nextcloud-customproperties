@@ -52,9 +52,9 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
     {
         $this->server = $server;
 
-        $this->server->xml->classMap[Property::class] = function (Writer $writer, Property $value) {
-            $writer->write($value->propertyvalue);
-        };
+//        $this->server->xml->classMap[Property::class] = function (Writer $writer, Property $value) {
+//            $writer->write($value->propertyvalue);
+//        };
 
         $this->server->on('propFind', [$this, 'propFind']);
         $this->server->on('propPatch', [$this, 'propPatch']);
