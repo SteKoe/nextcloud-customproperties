@@ -7,6 +7,7 @@ use OCA\CustomProperties\Db\CustomProperty;
 use OCA\CustomProperties\Db\Property;
 use OCA\CustomProperties\Service\PropertyService;
 use OCA\DAV\Connector\Sabre\Node;
+use OCP\ILogger;
 use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\PropPatch;
@@ -75,12 +76,10 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
     public function propFind(PropFind $propFind, INode $node)
     {
         if ($node instanceof Node) {
-            $path = "files" . DIRECTORY_SEPARATOR . \OC_User::getUser() . $node->getPath();
-
             if ($propFind->isAllProps()) {
-                $this->handlePropFindAllProps($propFind, $path);
+                $this->handlePropFindAllProps($propFind, $node->getFileId());
             } else {
-                $this->handlePropFind($propFind, $path);
+                $this->handlePropFind($propFind, $node->getFileId());
             }
         }
     }
@@ -100,13 +99,17 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
             return;
         }
 
-        $propPatch->handle($this->getCustomPropertynames(), function ($a) use ($path) {
+        $propPatch->handle($this->getCustomPropertynames(), function ($a) use ($node) {
             try {
                 foreach ($a as $key => $value) {
+                    $property = $this->getPropByName($key);
+
                     if (!empty(trim($value))) {
-                        $this->propertyService->upsertProperty($path, $key, $value, $this->userId);
+                        $this->propertyService->upsertProperty($node->getFileId(), $key, $value,
+                                $this->getEffectiveUserId($property));
                     } else {
-                        $this->propertyService->deleteProperty($path, $key, $this->userId);
+                        $this->propertyService->deleteProperty($node->getFileId(), $key, 
+                                $this->getEffectiveUserId($property));
                     }
                 }
                 return true;
@@ -122,8 +125,11 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
      */
     private function handlePropFindAllProps(PropFind $propFind, string $path): void
     {
-        foreach ($this->getCustomPropertynames() as $propertyname) {
-            $entity = $this->propertyService->getCustomProperty($path, $propertyname, $this->userId);
+        foreach ($this->customPropertyDefinitions as $property) {
+            $propertyname = "{" . Application::NAMESPACE_URL . "}" . $property->propertyname;
+
+            $entity = $this->propertyService->getCustomProperty($path, $propertyname,
+                    $this->getEffectiveUserId($property));
             $value = $entity === null ? null : $entity->propertyvalue;
 
             $propFind->set($propertyname, $value);
@@ -136,10 +142,48 @@ class CustomPropertiesSabreServerPlugin extends ServerPlugin
      */
     private function handlePropFind(PropFind $propFind, string $path): void
     {
-        foreach ($this->getCustomPropertynames() as $propertyname) {
-            $propFind->handle($propertyname, function () use ($path, $propertyname) {
-                return $this->propertyService->getCustomProperty($path, $propertyname, $this->userId);
+        foreach ($this->customPropertyDefinitions as $property) {
+            $propertyname = "{" . Application::NAMESPACE_URL . "}" . $property->propertyname;
+
+            $propFind->handle($property->propertyname, function () use ($path, $property, $propertyname) {
+                return $this->propertyService->getCustomProperty($path, $propertyname,
+                        $this->getEffectiveUserId($property));
             });
         }
+    }
+
+    /**
+     * Finds a property in the list of property definitions by name.
+     *
+     * @param string $name The property name
+     */
+    private function getPropByName(string $name): ?CustomProperty
+    {
+        $property = current(array_filter($this->customPropertyDefinitions, function ($elem) use ($name) {
+            return "{" . Application::NAMESPACE_URL . "}" . $elem->propertyname === $name;
+        }));
+
+        if ($property === false) {
+            return null;
+        }
+        else {
+            return $property;
+        }
+    }
+
+    /**
+     * Gets the effective user id for the given property: an empty string for a shared property, $this->userId otherwise
+     *
+     * @param Property property
+     */
+    private function getEffectiveUserId(CustomProperty $property): string
+    {
+            if ($property->propertyshared == true) {
+                return "";
+            }
+            else {
+                return $this->userId;
+            }
+
     }
 }

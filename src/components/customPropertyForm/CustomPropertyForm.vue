@@ -36,6 +36,23 @@
 				required
 				type="text">
 		</div>
+		<div class="form-group form-group__propertyshared">
+			<select
+				v-model="property_.propertyshared"
+				:disabled="disabled.includes('propertyshared')"
+				aria-label="propertyshared"
+				class="propertyshared"
+				required>
+				<option
+					:key="false"
+					:value="false"
+					v-text="t('private', 'Private')" />
+				<option
+					:key="true"
+					:value="true"
+					v-text="t('shared', 'Shared')" />
+			</select>
+		</div>
 	</div>
 </template>
 
@@ -85,7 +102,7 @@ export default {
 
 .propertytype { margin-right: 3px; }
 
-.propertytype, .propertyname, .propertylabel {
+.propertytype, .propertyname, .propertylabel, .propertyshared {
   width: 100%;
 }
 
@@ -103,6 +120,10 @@ export default {
 
   &__propertylabel {
     flex: 4 0 0;
+  }
+
+  &__propertyshared {
+    flex: 0 0 95px;
   }
 }
 </style>

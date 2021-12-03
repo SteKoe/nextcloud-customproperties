@@ -17,6 +17,7 @@ describe('CreateCustomPropertyForm.vue', () => {
 			propertytype: 'text',
 			propertyname: 'name',
 			propertylabel: 'label',
+			propertyshared: false,
 		})
 	})
 

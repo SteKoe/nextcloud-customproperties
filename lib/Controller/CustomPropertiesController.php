@@ -53,6 +53,7 @@ class CustomPropertiesController extends Controller
         $newCustomProperty->setPropertyname($customProperty['propertyname']);
         $newCustomProperty->setPropertylabel($customProperty['propertylabel']);
         $newCustomProperty->setPropertytype($customProperty['propertytype']);
+        $newCustomProperty->setPropertyshared($customProperty['propertyshared']);
 
         if (!$newCustomProperty->isValid()) {
             throw new CustomPropertyInvalidError();
@@ -72,6 +73,7 @@ class CustomPropertiesController extends Controller
 
         $entity->setPropertyname($customProperty['propertyname']);
         $entity->setPropertylabel($customProperty['propertylabel']);
+        $entity->setPropertyshared($customProperty['propertyshared']);
 
         if (!$entity->isValid()) {
             throw new CustomPropertyInvalidError();
