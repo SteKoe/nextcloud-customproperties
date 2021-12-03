@@ -26,6 +26,7 @@ export default {
 				propertyname: null,
 				propertylabel: null,
 				propertytype: 'text',
+				propertyshared: false,
 			},
 		}
 	},
@@ -43,6 +44,7 @@ export default {
 				propertyname: null,
 				propertylabel: null,
 				propertytype: 'text',
+				propertyshared: false,
 			}
 		},
 		isBlank(str) {

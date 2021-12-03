@@ -15,6 +15,8 @@ class CustomProperty extends Entity
     public $propertylabel;
     /** @var string */
     public $propertytype;
+    /** @var bool*/
+    public $propertyshared;
 
     /**
      * @var string
@@ -28,6 +30,7 @@ class CustomProperty extends Entity
         $this->addType('propertyname', 'string');
         $this->addType('propertylabel', 'string');
         $this->addType('propertytype', 'string');
+        $this->addType('propertyshared', 'bool');
     }
 
     public static function withNamespaceURI($propertyname): string
