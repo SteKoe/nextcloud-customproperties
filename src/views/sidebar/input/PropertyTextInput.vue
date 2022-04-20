@@ -1,14 +1,14 @@
 <template>
 	<div class="customproperty-form-group">
-		<label :for="'property_'+property_.propertyname">{{ property_.propertylabel }}</label>
-
+		<label :for="'property'+property.propertyname">{{ property.propertylabel }}</label>
 		<div class="customproperty-input-group">
-			<input :id="'property_'+property_.propertyname"
-				v-model="property_.propertyvalue"
+			<input :id="'property'+property.propertyname"
+				v-model="value"
 				:aria-disabled="disabled"
 				:disabled="disabled"
-				:name="property_.propertyname"
-				:type="property_.propertytype"
+				:name="property.propertyname"
+				:type="type"
+				:step="stepSize"
 				class="customproperty-form-control"
 				@blur="blur">
 		</div>
@@ -18,9 +18,6 @@
 <script>
 export default {
 	name: 'PropertyTextInput',
-	model: {
-		prop: 'property',
-	},
 	props: {
 		property: {
 			type: Object,
@@ -33,12 +30,33 @@ export default {
 	},
 	data() {
 		return {
-			property_: this.property,
+			value: this.property.propertyvalue,
 		}
+	},
+	computed: {
+		stepSize() {
+			return this.property.propertytype?.toLowerCase() === 'decimal' ? 'any' : null
+		},
+		type() {
+			if (this.property.propertytype) {
+				const propertyType = this.property.propertytype.toLowerCase()
+				switch (propertyType) {
+				case 'decimal':
+					return 'number'
+				default:
+					return propertyType
+				}
+			}
+
+			return 'text'
+		},
 	},
 	methods: {
 		blur() {
-			this.$emit('blur', this.property_)
+			this.$emit('blur', {
+				...this.property,
+				propertyvalue: this.value,
+			})
 		},
 	},
 }

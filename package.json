@@ -12,7 +12,6 @@
   "scripts": {
     "build": "NODE_ENV=production webpack --progress --config webpack.config.js",
     "dev": "NODE_ENV=development webpack --progress --config webpack.config.js",
-    "watch": "NODE_ENV=development webpack --progress --watch --config webpack.config.js",
     "test": "npm-run-all --parallel test:js test:php",
     "test:js": "jest --env=jsdom",
     "test:php": "docker-compose -f infrastructure/docker-compose.yml run app phpunit --bootstrap tests/bootstrap.php apps/customproperties/tests/.",
