@@ -14,6 +14,8 @@ class Property extends Entity
     public $propertyname;
     /** @var string */
     public $propertyvalue;
+    /** @var int */
+    public $valuetype;
 
     public function __construct()
     {
@@ -22,5 +24,6 @@ class Property extends Entity
         $this->addType('propertypath', 'string');
         $this->addType('propertyname', 'string');
         $this->addType('propertyvalue', 'string');
+        $this->addType('valuetype', 'int');
     }
 }
